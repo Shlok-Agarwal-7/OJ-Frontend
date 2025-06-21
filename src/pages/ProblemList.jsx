@@ -1,67 +1,67 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import ProblemRow from "../components/ProblemRow";
+import { BiSearchAlt2 } from "react-icons/bi";
 
-const dummyProblems = [
-  { id: 1, title: "Two Sum", difficulty: "Easy", author: "Alice" },
-  {
-    id: 2,
-    title: "Longest Substring Without Repeating Characters",
-    difficulty: "Medium",
-    author: "Bob",
-  },
+const problems = [
+  { id: 1, name: "Two Sum", difficulty: "Easy", author: "Alice" },
+  { id: 2, name: "Binary Search", difficulty: "Medium", author: "Bob" },
   {
     id: 3,
-    title: "Median of Two Sorted Arrays",
-    difficulty: "Hard",
+    name: "Longest Substring Without Repeating Characters",
+    difficulty: "Medium",
     author: "Charlie",
+  },
+  {
+    id: 4,
+    name: "Median of Two Sorted Arrays",
+    difficulty: "Hard",
+    author: "Dana",
   },
 ];
 
-export default function ProblemList() {
+const ProblemList = () => {
   return (
-    <div className="max-w-5xl mx-auto mt-10 px-4 ">
-      <h1 className="text-2xl font-semibold mb-6">🔥 Problem Set</h1>
-      <div className="bg-[#2e2e40] rounded-lg overflow-hidden shadow">
-        <table className="w-full text-left">
-          <thead className="bg-[#3a3a5a] text-sm uppercase text-gray-300">
-            <tr>
-              <th className="py-3 px-4">#</th>
-              <th className="py-3 px-4">Title</th>
-              <th className="py-3 px-4">Difficulty</th>
-              <th className="py-3 px-4">Author</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dummyProblems.map((prob, idx) => (
-              <tr key={prob.id} className="hover:bg-[#44445c] transition">
-                <td className="py-3 px-4">{idx + 1}</td>
-                <td className="py-3 px-4">
-                  <Link
-                    to={`/problems/${prob.id}`}
-                    className="text-blue-400 hover:underline"
-                  >
-                    {prob.title}
-                  </Link>
-                </td>
-                <td className="py-3 px-4">
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
-                      prob.difficulty === "Easy"
-                        ? "bg-green-700"
-                        : prob.difficulty === "Medium"
-                        ? "bg-yellow-600"
-                        : "bg-red-700"
-                    }`}
-                  >
-                    {prob.difficulty}
-                  </span>
-                </td>
-                <td className="py-3 px-4 text-white">{prob.author}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="min-h-screen primary primary-text p-6">
+      <h1 className="text-2xl font-bold mb-4">🧩 Problem List</h1>
+      <div className="flex justify-between mb-4">
+        <div className="relative w-1/4">
+          <BiSearchAlt2 className="absolute left-2 top-2.5 h-5 w-5 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search Problems"
+            className="card rounded-md p-2 pl-9 w-full bg-[#3a3b3c] text-white outline-none"
+          />
+        </div>
+
+        <Link to="/problem-create">
+          <button className="bg-blue-500 hover:bg-blue-400 rounded-md p-2">
+            Add New Problem
+          </button>
+        </Link>
+      </div>
+
+      {/* Header Row */}
+      <div className="flex items-center justify-between px-4 py-2 text-sm secondary-text border-b border-gray-600">
+        <span className="w-6">#</span>
+        <span className="flex-1 pl-4">Title</span>
+        <span>Difficulty</span>
+        <span className="pl-4">Author</span>
+      </div>
+
+      {/* List of Problems */}
+      <div className="mt-2">
+        {problems.map((problem) => (
+          <ProblemRow
+            key={problem.id}
+            id={problem.id}
+            name={problem.name}
+            difficulty={problem.difficulty}
+            author={problem.author}
+          />
+        ))}
       </div>
     </div>
   );
-}
+};
+
+export default ProblemList;

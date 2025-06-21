@@ -16,10 +16,10 @@ export default function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#1e1e2f] text-white px-4">
+    <div className="flex items-center justify-center min-h-screen text-white px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-[#2a2a40] w-full max-w-md p-8 rounded-xl shadow-xl"
+        className="card w-full max-w-md p-8 rounded-xl shadow-xl"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">🔑 Login</h2>
 
@@ -29,7 +29,7 @@ export default function Login() {
           name="username"
           value={form.username}
           onChange={handleChange}
-          className="w-full mb-4 p-3 rounded bg-[#1e1e2e] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full mb-4 p-3 rounded bg-[#3a3b3c] text-white focus:outline-none focus:ring-2 focus:ring-white"
           required
         />
 
@@ -39,7 +39,7 @@ export default function Login() {
           name="password"
           value={form.password}
           onChange={handleChange}
-          className="w-full mb-6 p-3 rounded bg-[#1e1e2e] text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full mb-6 p-3 rounded bg-[#3a3b3c] text-white focus:outline-none focus:ring-2 focus:ring-white"
           required
         />
 

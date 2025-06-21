@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#1e1e2f] text-white flex flex-col">
+    <div className="min-h-screen text-white flex flex-col">
       {/* Hero Section */}
-      <div className="flex flex-col items-center justify-center flex-1 px-6 py-20 text-center">
+      <div className="flex flex-col items-center justify-center flex-1 px-6 py-16 text-center">
         <h1 className="text-5xl md:text-6xl font-extrabold mb-6">
           Welcome to <span className="text-blue-500">CodeJudge</span>
         </h1>
@@ -31,7 +31,7 @@ export default function LandingPage() {
       </div>
 
       {/* Features Section */}
-      <div className="bg-[#2a2a40] py-12">
+      <div className="py-8">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-10">✨ Features</h2>
           <div className="grid md:grid-cols-3 gap-8 text-center">
@@ -52,7 +52,7 @@ export default function LandingPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#1a1a2e] text-gray-400 py-6 text-center text-sm">
+      <footer className="card text-gray-400 py-6 text-center text-sm">
         © {new Date().getFullYear()} CodeJudge. All rights reserved.
       </footer>
     </div>
@@ -61,7 +61,7 @@ export default function LandingPage() {
 
 function FeatureCard({ title, desc }) {
   return (
-    <div className="bg-[#1e1e2f] p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
+    <div className="card p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-gray-400">{desc}</p>
     </div>

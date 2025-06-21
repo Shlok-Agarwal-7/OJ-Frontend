@@ -13,13 +13,13 @@ const topUsers = [
 
 export default function Leaderboard() {
   return (
-    <div className="w-full min-h-screen bg-[#1e1e2f] text-white px-4">
+    <div className="w-full min-h-screen primary-text px-4">
       <div className="max-w-4xl mx-auto mt-12">
         <h1 className="text-3xl font-bold text-center mb-8">🏆 Leaderboard</h1>
 
-        <div className="bg-[#2e2e40] shadow rounded-lg overflow-hidden">
+        <div className="card shadow rounded-lg overflow-hidden">
           <table className="w-full text-left">
-            <thead className="bg-[#3a3a5a] text-gray-300 text-sm uppercase">
+            <thead className="bg-[#3a3b3c] primary-text text-sm uppercase">
               <tr>
                 <th className="py-3 px-4">Rank</th>
                 <th className="py-3 px-4">User</th>
@@ -30,9 +30,9 @@ export default function Leaderboard() {
               {topUsers.map((user, idx) => (
                 <tr
                   key={idx}
-                  className="hover:bg-[#44445c] transition border-b border-[#3f3f55]"
+                  className="hover:bg-[#3a3b3c] transition border-b border-gray-800/50"
                 >
-                  <td className="py-3 px-4 font-semibold text-lg text-yellow-400">
+                  <td className="py-3 px-4 font-semibold text-lg text-yellow-300">
                     #{user.rank}
                   </td>
                   <td className="py-3 px-4">{user.name}</td>

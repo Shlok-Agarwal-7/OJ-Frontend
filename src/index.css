@@ -1,6 +1,22 @@
 @import "tailwindcss";
 
 body {
-  background-color: #1e1e2f;
+  background-color: #18191a;
   color: white;
+}
+
+.card {
+  background-color: #242526;
+}
+
+.card hover {
+  background-color: #3a3b3c;
+}
+
+.primary-text {
+  color: #e4e6eb;
+}
+
+.secondary-text {
+  color: #b0b3b8;
 }
