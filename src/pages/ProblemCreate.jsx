@@ -1,12 +1,9 @@
 import ProblemForm from "../components/ProblemForm";
+import {useState} from "react"
 
 const CreateProblemPage = () => {
-  const handleCreate = (formData) => {
-    console.log("Creating problem:", formData);
-    // Send to backend here
-  };
 
-  return <ProblemForm onSubmit={handleCreate} />;
+ return <ProblemForm/>;
 };
 
 export default CreateProblemPage;

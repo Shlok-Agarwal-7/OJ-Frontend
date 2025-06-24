@@ -22,7 +22,7 @@ const ProblemRow = ({ id, name, difficulty, author }) => {
       </Link>
 
       {/* Difficulty Badge */}
-      <Link to="/problem-update" className="cursor-pointer mx-2">
+      <Link to={`/problem-update/${id}`} className="cursor-pointer mx-2">
         <RxUpdate className="secondary-text hover:primary-text transition" />
       </Link>
 

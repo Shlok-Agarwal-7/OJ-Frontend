@@ -1,17 +1,22 @@
-const topUsers = [
-  { rank: 1, name: "Alice", points: 980 },
-  { rank: 2, name: "Bob", points: 930 },
-  { rank: 3, name: "Charlie", points: 870 },
-  { rank: 4, name: "Dave", points: 850 },
-  { rank: 5, name: "Eve", points: 820 },
-  { rank: 6, name: "Frank", points: 800 },
-  { rank: 7, name: "Grace", points: 790 },
-  { rank: 8, name: "Heidi", points: 775 },
-  { rank: 9, name: "Ivan", points: 760 },
-  { rank: 10, name: "Judy", points: 750 },
-];
+import apiClient from "../backend";
+import { useEffect, useState } from "react";
 
 export default function Leaderboard() {
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState([]);
+
+  useEffect(() => {
+    const fetchTopUser = async () => {
+      try {
+        const response = await apiClient.get("/api/top-users");
+        setUsers(response.data);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    fetchTopUser()
+  }, []);
   return (
     <div className="w-full min-h-screen primary-text px-4">
       <div className="max-w-4xl mx-auto mt-12">
@@ -27,15 +32,15 @@ export default function Leaderboard() {
               </tr>
             </thead>
             <tbody>
-              {topUsers.map((user, idx) => (
+              {users.map((user, idx) => (
                 <tr
                   key={idx}
                   className="hover:bg-[#3a3b3c] transition border-b border-gray-800/50"
                 >
                   <td className="py-3 px-4 font-semibold text-lg text-yellow-300">
-                    #{user.rank}
+                    #{idx + 1}
                   </td>
-                  <td className="py-3 px-4">{user.name}</td>
+                  <td className="py-3 px-4">{user.username}</td>
                   <td className="py-3 px-4 text-green-400 font-medium">
                     {user.points}
                   </td>

@@ -11,7 +11,7 @@ import CreateProblemPage from "./pages/ProblemCreate";
 
 function App() {
   const location = useLocation();
-  const hideNavbar = ["/login", "/register","/"];
+  const hideNavbar = ["/login", "/register"];
 
   return (
     <>
@@ -23,8 +23,8 @@ function App() {
         <Route element={<Leaderboard />} path="/leaderboard" />
         <Route element={<ProblemList />} path="/problems" />
         <Route element={<ProblemDetail />} path="/problem/:id" />
-        <Route element={<ProblemUpdate />} path="/problem-update" />
-        <Route element={<CreateProblemPage/>} path="/problem-create"/>
+        <Route element={<ProblemUpdate />} path="/problem-update/:id" />
+        <Route element={<CreateProblemPage />} path="/problem-create" />
       </Routes>
     </>
   );

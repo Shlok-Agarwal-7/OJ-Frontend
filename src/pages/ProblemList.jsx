@@ -1,25 +1,28 @@
 import { Link } from "react-router-dom";
 import ProblemRow from "../components/ProblemRow";
 import { BiSearchAlt2 } from "react-icons/bi";
-
-const problems = [
-  { id: 1, name: "Two Sum", difficulty: "Easy", author: "Alice" },
-  { id: 2, name: "Binary Search", difficulty: "Medium", author: "Bob" },
-  {
-    id: 3,
-    name: "Longest Substring Without Repeating Characters",
-    difficulty: "Medium",
-    author: "Charlie",
-  },
-  {
-    id: 4,
-    name: "Median of Two Sorted Arrays",
-    difficulty: "Hard",
-    author: "Dana",
-  },
-];
+import { useEffect, useState } from "react";
+import apiClient from "../backend";
 
 const ProblemList = () => {
+  useEffect(() => {
+    const fetchProblems = async () => {
+      try {
+        const response = await apiClient.get("/problems");
+        setProblems(response.data);
+      } catch (e) {
+        setError(e);
+        console.log(error);
+      }
+    };
+
+    fetchProblems();
+  }, []);
+
+  // states
+  const [problems, setProblems] = useState([]);
+  const [error, setError] = useState("");
+
   return (
     <div className="min-h-screen primary primary-text p-6">
       <h1 className="text-2xl font-bold mb-4">🧩 Problem List</h1>
@@ -54,9 +57,9 @@ const ProblemList = () => {
           <ProblemRow
             key={problem.id}
             id={problem.id}
-            name={problem.name}
+            name={problem.title}
             difficulty={problem.difficulty}
-            author={problem.author}
+            author={problem.created_by}
           />
         ))}
       </div>

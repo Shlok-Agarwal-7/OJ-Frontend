@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Register from "./Register";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import apiClient from "../backend";
+import { setClientToken } from "../backend";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
+  const [error, setError] = useState();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -11,8 +14,17 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Logging in:", form);
-    // call your backend here
+    apiClient
+      .post("api/login", form)
+      .then((response) => {
+        setClientToken(response.data.tokens.access);
+        localStorage.setItem("access", response.data.tokens.access);
+        localStorage.setItem("refresh", response.data.tokens.refresh);
+        navigate("/problems")        
+      })
+      .catch((error) => {
+        setError(error);
+      });
   };
 
   return (

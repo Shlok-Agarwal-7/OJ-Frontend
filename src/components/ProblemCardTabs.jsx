@@ -1,23 +1,19 @@
-const renderContent = ({ activeTab }) => {
-    
+const renderContent = ({ activeTab, detail }) => {
+   
   switch (activeTab) {
     case "problem":
       return (
         <>
-          <h2 className="text-xl font-semibold mb-4">2 SUM</h2>
-          <p className="mb-2">
-            Given an array of integers, return indices of the two numbers such
-            that they add up to a specific target.
-          </p>
-          <p className="mb-2">
-            You may assume that each input would have exactly one solution.
-          </p>
+          <h2 className="text-xl font-semibold mb-4">{detail?.title}</h2>
+          <p className="mb-2">{detail?.question}</p>
           <h3 className="mt-4 mb-2 font-bold">Input:</h3>
           <pre className="bg-[#3a3b3c] p-2 rounded">
-            nums = [2,7,11,15], target = 9
+            {detail?.testcases[0]?.input}
           </pre>
           <h3 className="mt-4 mb-2 font-bold">Output:</h3>
-          <pre className="bg-[#3a3b3c] p-2 rounded">[0,1]</pre>
+          <pre className="bg-[#3a3b3c] p-2 rounded">
+            {detail?.testcases[0]?.output}
+          </pre>
         </>
       );
 

@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import apiClient from "../backend";
+import { setClientToken } from "../backend";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -10,8 +14,17 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Registering:", form);
-    // call your backend here
+    apiClient
+      .post("api/register", form)
+      .then((response) => {
+        setClientToken(response?.data?.tokens?.access);
+        localStorage.setItem("refresh", response?.data?.tokens?.refresh);
+        localStorage.setItem("access", response?.data?.tokens?.access);
+        navigate("/problems");
+      })
+      .catch((error) => {
+        setError(error);
+      });
   };
 
   return (

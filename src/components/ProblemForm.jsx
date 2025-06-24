@@ -1,38 +1,96 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import apiClient from "../backend";
 
-const ProblemForm = ({ initialData = {}, onSubmit }) => {
-  const [formData, setFormData] = useState({
-    title: initialData.title || "",
-    description: initialData.description || "",
-    difficulty: initialData.difficulty || "Easy",
-    author: initialData.author || "",
-    input: initialData.input || "",
-    output: initialData.output || "",
-  });
+const ProblemForm = ({ initialData = {} }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [difficulty, setDifficulty] = useState("");
+  const [testcases, setTestcases] = useState([]);
+  const [id,setId] = useState([]);
+  const [error, setError] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  useEffect(() => {
+    setTitle(initialData.title || "");
+    setDescription(initialData.description || "");
+    setDifficulty(initialData.difficulty || "");
+    setId(initialData.id || "")
+  }, [initialData]);
+
+  const handleJsonUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      try {
+        const json = JSON.parse(event.target.result);
+        setTestcases([json]);
+      } catch (err) {
+        alert("Invalid JSON file!");
+        console.error(err);
+      }
+    };
+
+    reader.readAsText(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleCreate = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    const payload = {
+      testcases: testcases[0],
+      difficulty: difficulty,
+      question: description,
+      title: title,
+    };
+
+    apiClient
+      .post("problems/create", payload)
+      .then((response) => {
+        if (response.status == 201) {
+          console.log("Problem Created Successfully");
+        }
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  };
+
+  
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    const payload = {
+      testcases: testcases[0],
+      difficulty: difficulty,
+      question: description,
+      title: title,
+    };
+
+    apiClient
+      .patch(`problems/${id}/update`, payload)
+      .then((response) => {
+        if (response.status == 201) {
+          console.log("Problem Updated Successfully");
+        }
+      })
+      .catch((error) => {
+        setError(error);
+      });
   };
 
   return (
     <div className="max-w-2xl mx-auto  text-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">
-        {initialData.id ? "✏️ Update Problem" : "📝 Create Problem"}
+        {initialData.description ? "Update Problem" : "Create Problem"}
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form className="space-y-4">
         {/* Title */}
         <div>
           <label className="block mb-1 text-sm">Title</label>
           <input
             name="title"
-            value={formData.title}
-            onChange={handleChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white"
             placeholder="Enter problem title"
             required
@@ -44,9 +102,9 @@ const ProblemForm = ({ initialData = {}, onSubmit }) => {
           <label className="block mb-1 text-sm">Description</label>
           <textarea
             name="description"
-            value={formData.description}
-            onChange={handleChange}
-            rows={4}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={10}
             className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white resize-none"
             placeholder="Problem description"
             required
@@ -58,8 +116,8 @@ const ProblemForm = ({ initialData = {}, onSubmit }) => {
           <label className="block mb-1 text-sm">Difficulty</label>
           <select
             name="difficulty"
-            value={formData.difficulty}
-            onChange={handleChange}
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
             className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white"
           >
             <option value="Easy">Easy</option>
@@ -68,51 +126,32 @@ const ProblemForm = ({ initialData = {}, onSubmit }) => {
           </select>
         </div>
 
-        {/* Author */}
-        <div>
-          <label className="block mb-1 text-sm">Author</label>
-          <input
-            name="author"
-            value={formData.author}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white"
-            placeholder="Enter author name"
-          />
-        </div>
+        <label>Upload Testcases JSON:</label>
+        <input type="file" accept=".json" onChange={handleJsonUpload} />
 
-        {/* Input */}
-        <div>
-          <label className="block mb-1 text-sm">Sample Input</label>
-          <textarea
-            name="input"
-            value={formData.input}
-            onChange={handleChange}
-            rows={2}
-            className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white resize-none"
-            placeholder="e.g. nums = [2, 7, 11, 15], target = 9"
-          />
-        </div>
-
-        {/* Output */}
-        <div>
-          <label className="block mb-1 text-sm">Sample Output</label>
-          <textarea
-            name="output"
-            value={formData.output}
-            onChange={handleChange}
-            rows={2}
-            className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white resize-none"
-            placeholder="e.g. [0, 1]"
-          />
-        </div>
+        {testcases.length > 0 && (
+          <div>
+            <p>✔ {testcases.length} testcases loaded.</p>
+          </div>
+        )}
 
         {/* Submit */}
-        <button
-          type="submit"
-          className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"
-        >
-          {initialData.id ? "Update" : "Create"}
-        </button>
+
+        {initialData.description ? (
+          <button
+            onClick = {handleUpdate}
+            className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"
+          >
+            Update
+          </button>
+        ) : (
+          <button
+            onClick = {handleCreate}
+            className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"
+          >
+            Create
+          </button>
+        )}
       </form>
     </div>
   );

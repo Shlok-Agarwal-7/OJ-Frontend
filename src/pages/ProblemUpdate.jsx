@@ -1,22 +1,31 @@
 import ProblemForm from "../components/ProblemForm";
-
-const existingProblem = {
-  id: 1,
-  title: "Two Sum",
-  description: "Given an array of integers...",
-  difficulty: "Easy",
-  author: "Alice",
-  input: "nums = [2, 7, 11, 15], target = 9",
-  output: "[0, 1]",
-};
+import apiClient from "../backend";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const UpdateProblemPage = () => {
-  const handleUpdate = (formData) => {
-    console.log("Updating problem:", formData);
-    // Send update to backend
-  };
+  const { id } = useParams();
 
-  return <ProblemForm initialData={existingProblem} onSubmit={handleUpdate} />;
+  const [error, setError] = useState();
+  const [existingProblem, setExistingProblem] = useState({});
+  useEffect(() => {
+    apiClient
+      .get(`/problems/${id}`)
+      .then((response) => {
+        console.log(response.data);
+        setExistingProblem({
+          description: response.data?.question,
+          difficulty: response.data?.difficulty,
+          title: response.data?.title,
+          id : id
+        });
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  }, []);
+
+  return <ProblemForm initialData={existingProblem} />;
 };
 
 export default UpdateProblemPage;

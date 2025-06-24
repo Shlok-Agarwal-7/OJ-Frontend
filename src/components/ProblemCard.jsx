@@ -1,7 +1,8 @@
 import { useState } from "react";
 import ProblemCardTabs  from "./ProblemCardTabs";
 
-const ProblemCard = () => {
+const ProblemCard = ({detail}) => {
+
   const [activeTab, setActiveTab] = useState("problem");
 
   return (
@@ -48,7 +49,7 @@ const ProblemCard = () => {
 
       {/* Tab Content */}
       <div className="flex-grow overflow-y-auto">
-        {<ProblemCardTabs activeTab={activeTab} />}
+        {<ProblemCardTabs activeTab={activeTab} detail = {detail}/>}
       </div>
     </div>
   );
