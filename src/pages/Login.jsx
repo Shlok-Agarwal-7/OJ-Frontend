@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
-import { setClientToken } from "../backend";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -17,10 +16,9 @@ export default function Login() {
     apiClient
       .post("api/login", form)
       .then((response) => {
-        setClientToken(response.data.tokens.access);
-        localStorage.setItem("access", response.data.tokens.access);
-        localStorage.setItem("refresh", response.data.tokens.refresh);
-        navigate("/problems")        
+        localStorage.setItem("access_token", response.data.access);
+        console.log(response);
+        navigate("/problems");
       })
       .catch((error) => {
         setError(error);

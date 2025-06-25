@@ -36,7 +36,7 @@ export default function Navbar() {
         >
           Leaderboard
         </Link>
-        {localStorage.getItem("refresh") == null ? (
+        {localStorage.getItem("access_token") == null ? (
           <Link
             to="/login"
             className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded text-sm"

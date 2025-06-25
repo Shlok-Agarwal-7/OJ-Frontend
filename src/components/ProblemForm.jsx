@@ -1,20 +1,12 @@
 import { useState, useEffect } from "react";
 import apiClient from "../backend";
 
-const ProblemForm = ({ initialData = {} }) => {
+const ProblemForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [difficulty, setDifficulty] = useState("");
+  const [difficulty, setDifficulty] = useState("Easy");
   const [testcases, setTestcases] = useState([]);
-  const [id,setId] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setTitle(initialData.title || "");
-    setDescription(initialData.description || "");
-    setDifficulty(initialData.difficulty || "");
-    setId(initialData.id || "")
-  }, [initialData]);
+  const [error,setError] = useState(null)
 
   const handleJsonUpload = (e) => {
     const file = e.target.files[0];
@@ -44,6 +36,8 @@ const ProblemForm = ({ initialData = {} }) => {
       title: title,
     };
 
+    console.log(testcases)
+
     apiClient
       .post("problems/create", payload)
       .then((response) => {
@@ -55,34 +49,9 @@ const ProblemForm = ({ initialData = {} }) => {
         setError(error);
       });
   };
-
-  
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    const payload = {
-      testcases: testcases[0],
-      difficulty: difficulty,
-      question: description,
-      title: title,
-    };
-
-    apiClient
-      .patch(`problems/${id}/update`, payload)
-      .then((response) => {
-        if (response.status == 201) {
-          console.log("Problem Updated Successfully");
-        }
-      })
-      .catch((error) => {
-        setError(error);
-      });
-  };
-
   return (
     <div className="max-w-2xl mx-auto  text-white p-6 rounded-lg shadow">
-      <h2 className="text-xl font-semibold mb-4">
-        {initialData.description ? "Update Problem" : "Create Problem"}
-      </h2>
+      <h2 className="text-xl font-semibold mb-4">Create Problem</h2>
       <form className="space-y-4">
         {/* Title */}
         <div>
@@ -137,21 +106,12 @@ const ProblemForm = ({ initialData = {} }) => {
 
         {/* Submit */}
 
-        {initialData.description ? (
-          <button
-            onClick = {handleUpdate}
-            className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"
-          >
-            Update
-          </button>
-        ) : (
-          <button
-            onClick = {handleCreate}
-            className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"
-          >
-            Create
-          </button>
-        )}
+        <button
+          onClick={handleCreate}
+          className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"
+        >
+          Create
+        </button>
       </form>
     </div>
   );
