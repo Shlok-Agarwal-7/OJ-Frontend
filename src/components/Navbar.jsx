@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function Navbar() {
   const [error, setError] = useState(null);
@@ -12,6 +13,7 @@ export default function Navbar() {
       .post("/api/logout", { refresh: refresh })
       .then((response) => {
         navigate("/");
+        toast.success("Successfuly logged out");
         localStorage.clear();
       })
       .catch((error) => {

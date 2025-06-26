@@ -1,14 +1,14 @@
-import { useParams} from "react-router-dom";
-import {useState,useEffect} from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import CodeEditor from "../components/CodeEditor";
 import ProblemCard from "../components/ProblemCard";
 import apiClient from "../backend";
-
+import { toast } from "sonner";
 export default function ProblemDetail() {
   const { id } = useParams();
 
   const [detail, setDetail] = useState(null);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProblem = async () => {
@@ -16,7 +16,8 @@ export default function ProblemDetail() {
         const response = await apiClient.get(`problems/${id}`);
         setDetail(response.data);
       } catch (e) {
-        setError(e);
+        navigate("/register");
+        toast.info("Need to logged in to access page");
       }
     };
 
@@ -26,7 +27,7 @@ export default function ProblemDetail() {
   return (
     <div className="flex w-full justify-center mt-5">
       <div className="w-1/2 h-full  px-2">
-        <ProblemCard detail = {detail}/>
+        <ProblemCard detail={detail} />
       </div>
       <div className="w-1/2 h-full px-2">
         <CodeEditor />

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
-
+import { toast } from "sonner";
 export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState(null);
@@ -16,11 +16,17 @@ export default function Register() {
     apiClient
       .post("api/register", form)
       .then((response) => {
-        localStorage.setItem("access_token", response.data.access)
+        localStorage.setItem("access_token", response.data.access);
         navigate("/problems");
+        toast.success(`Welcome ${response.data.username}`);
       })
       .catch((error) => {
-        setError(error);
+        if (error.status === 400) {
+          const fields = error.response.data.non_field_errors;
+          fields.map((item, idx) => {
+              toast.error(item);
+          });
+        }
       });
   };
 

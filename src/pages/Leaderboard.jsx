@@ -1,9 +1,11 @@
 import apiClient from "../backend";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
-  const [error, setError] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTopUser = async () => {
@@ -11,11 +13,12 @@ export default function Leaderboard() {
         const response = await apiClient.get("/api/top-users");
         setUsers(response.data);
       } catch (error) {
-        setError(error);
+        navigate("/register");
+        toast.info("Need to be logged in to access page");
       }
     };
 
-    fetchTopUser()
+    fetchTopUser();
   }, []);
   return (
     <div className="w-full min-h-screen primary-text px-4">

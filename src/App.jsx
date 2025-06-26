@@ -11,7 +11,7 @@ import CreateProblemPage from "./pages/ProblemCreate";
 
 function App() {
   const location = useLocation();
-  const hideNavbar = ["/login", "/register"];
+  const hideNavbar = ["/login", "/register", "/"];
 
   return (
     <>

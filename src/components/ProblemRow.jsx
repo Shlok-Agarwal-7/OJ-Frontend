@@ -1,11 +1,23 @@
 import { Link } from "react-router-dom";
 import { RxUpdate } from "react-icons/rx";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import apiClient from "../backend";
 
 const ProblemRow = ({ id, name, difficulty, author }) => {
   const difficultyColor = {
     Easy: "bg-green-600 text-white",
     Medium: "bg-yellow-500 text-black",
     Hard: "bg-red-600 text-white",
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await apiClient.delete(`/problems/${id}/delete`);
+      console.log(response);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -21,10 +33,13 @@ const ProblemRow = ({ id, name, difficulty, author }) => {
         {name}
       </Link>
 
-      {/* Difficulty Badge */}
       <Link to={`/problem-update/${id}`} className="cursor-pointer mx-2">
         <RxUpdate className="secondary-text hover:primary-text transition" />
       </Link>
+
+      <button className="cursor-pointer mx-2" onClick={handleDelete}>
+        <RiDeleteBin5Line className="secondary-text hover:primary-text transition" />
+      </button>
 
       <span
         className={`px-2 py-1 rounded text-xs font-semibold ${
