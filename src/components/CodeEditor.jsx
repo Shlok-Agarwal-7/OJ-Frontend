@@ -1,10 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import CodeEditorTabs from "./CodeEditorTabs";
+import apiClient from "../backend";
 
 const CodeEditor = () => {
   const [activeTab, setActiveTab] = useState("input");
   const [language, setLanguage] = useState("cpp");
+  const [code, setCode] = useState("");
 
+  const handleSubmit = async () => {
+    try {
+      const response = await apiClient.post("/execute", {
+        language: "py",
+        code: code,
+        input_data: "",
+      });
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div className="bg-[#2e2e40] card p-6 rounded-lg shadow flex flex-col h-full">
       <h2 className="text-lg font-semibold mb-2 text-white">💻 Code Editor</h2>
@@ -18,15 +32,17 @@ const CodeEditor = () => {
           className="bg-[#3a3b3c] text-gray-200 p-2 rounded w-full outline-none"
         >
           <option value="cpp">C++</option>
-          <option value="python">Python</option>
+          <option value="py">Python</option>
           <option value="java">Java</option>
-          <option value="javascript">JavaScript</option>
         </select>
       </div>
       {/* Code Textarea */}
       <textarea
         className="bg-[#3a3b3c] text-sm text-gray-200 p-4 rounded h-72 font-mono outline-none resize-none"
         placeholder="// write your solution here..."
+        onChange={(e) => {
+          setCode(e.target.value);
+        }}
       ></textarea>
 
       {/* Tab Navigation */}
@@ -54,7 +70,10 @@ const CodeEditor = () => {
         <button className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded">
           Run
         </button>
-        <button className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded">
+        <button
+          className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </div>
