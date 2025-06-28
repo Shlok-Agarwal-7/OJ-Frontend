@@ -30,7 +30,7 @@ export default function ProblemDetail() {
         <ProblemCard detail={detail} />
       </div>
       <div className="w-1/2 h-full px-2">
-        <CodeEditor />
+        <CodeEditor id = {id}/>
       </div>
     </div>
   );

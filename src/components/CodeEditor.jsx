@@ -1,24 +1,52 @@
 import { useState } from "react";
 import CodeEditorTabs from "./CodeEditorTabs";
 import apiClient from "../backend";
+import { toast } from "sonner";
 
-const CodeEditor = () => {
+const CodeEditor = ({ id }) => {
   const [activeTab, setActiveTab] = useState("input");
   const [language, setLanguage] = useState("cpp");
   const [code, setCode] = useState("");
+  const [input, setInput] = useState();
+  const [output, setOutput] = useState();
+  const [verdict,setVerdict] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const handleRun = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.post("/execute", {
+        language: language,
+        code: code,
+        input_data: input,
+      });
+      setOutput(response.data.output);
+      toast.success("Code Ran Sucessfully");
+    } catch (e) {
+      toast.error("There was a error executing the code");
+    }
+    setLoading(false);
+    setActiveTab("output");
+  };
 
   const handleSubmit = async () => {
     try {
-      const response = await apiClient.post("/execute", {
-        language: "py",
+      setLoading(true);
+      const response = await apiClient.post("/submit", {
+        language: language,
         code: code,
-        input_data: "",
+        problem: id,
       });
-      console.log(response.data);
+      setVerdict(response.data.verdict);
+      toast.info("Code Submitted Successfully");
     } catch (e) {
+      toast.error("There was server error at our side");
       console.log(e);
     }
+    setLoading(true);
+    setActiveTab("verdict");
   };
+
   return (
     <div className="bg-[#2e2e40] card p-6 rounded-lg shadow flex flex-col h-full">
       <h2 className="text-lg font-semibold mb-2 text-white">💻 Code Editor</h2>
@@ -63,11 +91,25 @@ const CodeEditor = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="mt-0">{<CodeEditorTabs activeTab={activeTab} />}</div>
+      <div className="mt-0">
+        {
+          <CodeEditorTabs
+            activeTab={activeTab}
+            setInput={setInput}
+            output={output}
+            loading={loading}
+            input={input}
+            verdict = {verdict}
+          />
+        }
+      </div>
 
       {/* Bottom Buttons */}
       <div className="mt-auto pt-4 flex justify-end gap-4">
-        <button className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded">
+        <button
+          className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded"
+          onClick={handleRun}
+        >
           Run
         </button>
         <button
