@@ -27,7 +27,7 @@ export default function ProblemDetail() {
   return (
     <div className="flex w-full justify-center mt-5">
       <div className="w-1/2 h-full  px-2">
-        <ProblemCard detail={detail} />
+        <ProblemCard detail={detail} id = {id}/>
       </div>
       <div className="w-1/2 h-full px-2">
         <CodeEditor id = {id}/>

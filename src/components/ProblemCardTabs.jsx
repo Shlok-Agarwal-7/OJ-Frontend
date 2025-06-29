@@ -1,5 +1,9 @@
-const renderContent = ({ activeTab, detail }) => {
-   
+const renderContent = ({
+  activeTab,
+  detail,
+  userSubmissions,
+  allSubmissions,
+}) => {
   switch (activeTab) {
     case "problem":
       return (
@@ -21,15 +25,49 @@ const renderContent = ({ activeTab, detail }) => {
       return (
         <div className="text-gray-300">
           <h2 className="text-xl font-semibold mb-4">📄 My Submissions</h2>
-          <p>No submissions yet.</p>
+          {userSubmissions.length === 0 ? (
+            <p>No submissions yet.</p>
+          ) : (
+            <ul className="space-y-2">
+              {userSubmissions.map((submission, index) => (
+                <li key={index} className="bg-[#3a3b3c] p-3 rounded shadow-md">
+                  <p>
+                    <span className="font-bold">Language:</span>{" "}
+                    {submission.language}
+                  </p>
+                  <p>
+                    <span className="font-bold">Verdict:</span>{" "}
+                    {submission.verdict}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       );
 
     case "all":
       return (
         <div className="text-gray-300">
-          <h2 className="text-xl font-semibold mb-4">🌍 All Submissions</h2>
-          <p>All recent submissions will appear here.</p>
+          <h2 className="text-xl font-semibold mb-4">📄 My Submissions</h2>
+          {allSubmissions.length === 0 ? (
+            <p>No submissions yet.</p>
+          ) : (
+            <ul className="space-y-2">
+              {allSubmissions.map((submission, index) => (
+                <li key={index} className="bg-[#3a3b3c] p-3 rounded shadow-md">
+                  <p>
+                    <span className="font-bold">Language:</span>{" "}
+                    {submission.language}
+                  </p>
+                  <p>
+                    <span className="font-bold">Verdict:</span>{" "}
+                    {submission.verdict}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       );
 

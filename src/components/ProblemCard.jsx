@@ -1,7 +1,34 @@
 import { useState } from "react";
-import ProblemCardTabs  from "./ProblemCardTabs";
+import ProblemCardTabs from "./ProblemCardTabs";
+import apiClient from "../backend";
 
-const ProblemCard = ({detail}) => {
+const ProblemCard = ({ detail, id }) => {
+  const [userSubmissions, setUserSubmissions] = useState([]);
+  const [allSubmissions, setAllSubmissions] = useState([]);
+
+  const handleUserSubmission = async () => {
+    setActiveTab("my");
+    apiClient
+      .get(`/getusersubmissions/?problem=${id}`)
+      .then((response) => {
+        setUserSubmissions(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleAllSubmissions = async () => {
+    setActiveTab("all");
+    apiClient
+      .get(`/getallsubmissions/?problem=${id}`)
+      .then((response) => {
+        setAllSubmissions(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const [activeTab, setActiveTab] = useState("problem");
 
@@ -27,7 +54,9 @@ const ProblemCard = ({detail}) => {
               className={`px-3 py-1 rounded-t ${
                 activeTab === "my" ? "bg-[#3a3b3c] text-white" : "text-gray-400"
               }`}
-              onClick={() => setActiveTab("my")}
+              onClick={() => {
+                handleUserSubmission();
+              }}
             >
               My Submissions
             </button>
@@ -39,7 +68,7 @@ const ProblemCard = ({detail}) => {
                   ? "bg-[#3a3b3c] text-white"
                   : "text-gray-400"
               }`}
-              onClick={() => setActiveTab("all")}
+              onClick={() => {handleAllSubmissions()}}
             >
               All Submissions
             </button>
@@ -49,7 +78,14 @@ const ProblemCard = ({detail}) => {
 
       {/* Tab Content */}
       <div className="flex-grow overflow-y-auto">
-        {<ProblemCardTabs activeTab={activeTab} detail = {detail}/>}
+        {
+          <ProblemCardTabs
+            activeTab={activeTab}
+            detail={detail}
+            userSubmissions={userSubmissions}
+            allSubmissions={allSubmissions}
+          />
+        }
       </div>
     </div>
   );
