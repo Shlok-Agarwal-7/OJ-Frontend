@@ -33,7 +33,7 @@ const ProblemCard = ({ detail, id }) => {
   const [activeTab, setActiveTab] = useState("problem");
 
   return (
-    <div className="bg-[#2e2e40] p-6 rounded-lg shadow card h-full flex flex-col">
+    <div className="bg-[#2e2e40] p-6 rounded-lg shadow card-color h-full flex flex-col">
       {/* Tabs */}
       <div className="flex items-center mb-5">
         <ul className="flex gap-4 text-sm font-medium text-gray-300">
@@ -68,7 +68,9 @@ const ProblemCard = ({ detail, id }) => {
                   ? "bg-[#3a3b3c] text-white"
                   : "text-gray-400"
               }`}
-              onClick={() => {handleAllSubmissions()}}
+              onClick={() => {
+                handleAllSubmissions();
+              }}
             >
               All Submissions
             </button>

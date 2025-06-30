@@ -23,7 +23,7 @@ const ProblemRow = ({ id, name, difficulty, author }) => {
   const role = localStorage.getItem("role");
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 card rounded-md text-sm mb-2">
+    <div className="flex items-center justify-between px-4 py-2 card-color rounded-md text-sm mb-2">
       {/* Problem ID */}
       <span className="w-6 text-gray-300">{id}</span>
 

@@ -5,11 +5,13 @@ import { toast } from "sonner";
 
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
+  const [range, setRange] = useState(5);
+
   const navigate = useNavigate();
   useEffect(() => {
     const fetchTopUser = async () => {
       try {
-        const response = await apiClient.get("/api/top-users");
+        const response = await apiClient.get(`/api/top-users/?range=${range}`);
         setUsers(response.data);
       } catch (error) {
         navigate("/register");
@@ -24,7 +26,7 @@ export default function Leaderboard() {
       <div className="max-w-4xl mx-auto mt-12">
         <h1 className="text-3xl font-bold text-center mb-8">🏆 Leaderboard</h1>
 
-        <div className="card shadow rounded-lg overflow-hidden">
+        <div className="card-color shadow rounded-lg overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-[#3a3b3c] primary-text text-sm uppercase">
               <tr>

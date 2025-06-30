@@ -55,7 +55,7 @@ export default function LandingPage() {
 
 function FeatureCard({ title, desc }) {
   return (
-    <div className="card p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
+    <div className="card-color p-6 rounded-lg shadow hover:shadow-lg transition duration-300">
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-gray-400">{desc}</p>
     </div>

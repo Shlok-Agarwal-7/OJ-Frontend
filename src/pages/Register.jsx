@@ -9,7 +9,7 @@ export default function Register() {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  } ;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ export default function Register() {
         if (error.status === 400) {
           const fields = error.response.data.non_field_errors;
           fields.map((item, idx) => {
-              toast.error(item);
+            toast.error(item);
           });
         }
       });
@@ -36,7 +36,7 @@ export default function Register() {
     <div className="flex items-center justify-center min-h-screen text-white px-4">
       <form
         onSubmit={handleSubmit}
-        className="card w-full max-w-md p-8 rounded-xl shadow-xl"
+        className="card-color w-full max-w-md p-8 rounded-xl shadow-xl"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">🔐 Register</h2>
 

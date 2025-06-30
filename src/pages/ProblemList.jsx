@@ -41,7 +41,7 @@ const ProblemList = () => {
             onChange={(e) => {
               setSearchQuery(e.target.value);
             }}
-            className="card rounded-md p-2 pl-9 w-full bg-[#3a3b3c] text-white outline-none"
+            className="card-color rounded-md p-2 pl-9 w-full bg-[#3a3b3c] text-white outline-none"
           />
         </div>
 

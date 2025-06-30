@@ -14,7 +14,7 @@ const CodeDialog = ({ code }) => {
 
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-          <div className="card text-black p-6 rounded-lg max-w-2xl w-full shadow-lg relative">
+          <div className="card-color text-black p-6 rounded-lg max-w-2xl w-full shadow-lg relative">
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-2 right-2 text-xl text-gray-600 hover:text-black"

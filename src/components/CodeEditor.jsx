@@ -48,7 +48,7 @@ const CodeEditor = ({ id }) => {
   };
 
   return (
-    <div className="bg-[#2e2e40] card p-6 rounded-lg shadow flex flex-col h-full">
+    <div className="bg-[#2e2e40] card-color p-6 rounded-lg shadow flex flex-col h-full">
       <h2 className="text-lg font-semibold mb-2 text-white">💻 Code Editor</h2>
       {/* Language Selector */}
 

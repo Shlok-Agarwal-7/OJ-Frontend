@@ -34,7 +34,7 @@ export default function Login() {
     <div className="flex items-center justify-center min-h-screen text-white px-4">
       <form
         onSubmit={handleSubmit}
-        className="card w-full max-w-md p-8 rounded-xl shadow-xl"
+        className="card-color w-full max-w-md p-8 rounded-xl shadow-xl"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">🔑 Login</h2>
 
