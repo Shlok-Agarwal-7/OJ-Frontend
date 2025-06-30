@@ -9,7 +9,7 @@ export default function Register() {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  } ;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +17,8 @@ export default function Register() {
       .post("api/register", form)
       .then((response) => {
         localStorage.setItem("access_token", response.data.access);
+        localStorage.setItem("username", response.data.username);
+        localStorage.setItem("role", response.data.role);
         navigate("/problems");
         toast.success(`Welcome ${response.data.username}`);
       })

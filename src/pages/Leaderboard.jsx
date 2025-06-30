@@ -6,7 +6,6 @@ import { toast } from "sonner";
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchTopUser = async () => {
       try {
@@ -38,13 +37,23 @@ export default function Leaderboard() {
               {users.map((user, idx) => (
                 <tr
                   key={idx}
-                  className="hover:bg-[#3a3b3c] transition border-b border-gray-800/50"
+                  className={`hover:bg-[#3a3b3c] transition border-b border-gray-800/50 ${
+                    localStorage.getItem("username") == user.username
+                      ? "bg-[#ecfdf3] text-[#189642]"
+                      : ""
+                  }`}
                 >
-                  <td className="py-3 px-4 font-semibold text-lg text-yellow-300">
+                  <td
+                    className={`py-3 px-4 font-semibold text-lg ${
+                      localStorage.getItem("username") == user.username
+                        ? "text-[#189642]"
+                        : "text-yellow-300"
+                    }`}
+                  >
                     #{idx + 1}
                   </td>
                   <td className="py-3 px-4">{user.username}</td>
-                  <td className="py-3 px-4 text-green-400 font-medium">
+                  <td className="py-3 px-4 text-[#189642] font-medium">
                     {user.points}
                   </td>
                 </tr>

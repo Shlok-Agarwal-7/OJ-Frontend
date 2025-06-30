@@ -20,8 +20,14 @@ const ProblemList = () => {
   }, []);
 
   // states
+  const role = localStorage.getItem("role");
   const [problems, setProblems] = useState([]);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProblems = problems.filter((problem) =>
+    problem.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen primary primary-text p-6">
@@ -32,12 +38,19 @@ const ProblemList = () => {
           <input
             type="text"
             placeholder="Search Problems"
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
             className="card rounded-md p-2 pl-9 w-full bg-[#3a3b3c] text-white outline-none"
           />
         </div>
 
         <Link to="/problem-create">
-          <button className="bg-blue-500 hover:bg-blue-400 rounded-md p-2">
+          <button
+            className={`bg-blue-500 hover:bg-blue-400 rounded-md p-2 ${
+              role === "Student" ? "hidden disabled" : ""
+            }`}
+          >
             Add New Problem
           </button>
         </Link>
@@ -53,15 +66,21 @@ const ProblemList = () => {
 
       {/* List of Problems */}
       <div className="mt-2">
-        {problems.map((problem) => (
-          <ProblemRow
-            key={problem.id}
-            id={problem.id}
-            name={problem.title}
-            difficulty={problem.difficulty}
-            author={problem.created_by}
-          />
-        ))}
+        {filteredProblems.length > 0 ? (
+          filteredProblems.map((problem) => (
+            <ProblemRow
+              key={problem.id}
+              id={problem.id}
+              name={problem.title}
+              difficulty={problem.difficulty}
+              author={problem.created_by}
+            />
+          ))
+        ) : (
+          <div className="text-center py-8 text-gray-400">
+            No problems found.
+          </div>
+        )}
       </div>
     </div>
   );

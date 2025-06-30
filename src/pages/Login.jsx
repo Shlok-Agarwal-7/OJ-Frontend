@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
-import {toast} from "sonner"
+import { toast } from "sonner";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -18,12 +18,14 @@ export default function Login() {
       .post("api/login", form)
       .then((response) => {
         localStorage.setItem("access_token", response.data.access);
+        localStorage.setItem("username", response.data.username);
+        localStorage.setItem("role", response.data.role);
         navigate("/problems");
-        toast.success(`Welcome ${response.data.username}`)
+        toast.success(`Welcome ${response.data.username}`);
       })
       .catch((error) => {
-        if(error.status === 400){
-          toast.error("Verify Username and Password")
+        if (error.status === 400) {
+          toast.error("Verify Username and Password");
         }
       });
   };

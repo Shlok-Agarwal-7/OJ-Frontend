@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
+import { useState } from "react";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -10,6 +11,9 @@ import Navbar from "./components/Navbar";
 import CreateProblemPage from "./pages/ProblemCreate";
 
 function App() {
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
+
   const location = useLocation();
   const hideNavbar = ["/login", "/register", "/"];
 
@@ -18,9 +22,18 @@ function App() {
       {!hideNavbar.includes(location.pathname) && <Navbar />}
       <Routes>
         <Route element={<Landing />} path="/" />
-        <Route element={<Register />} path="/register" />
-        <Route element={<Login />} path="/login" />
-        <Route element={<Leaderboard />} path="/leaderboard" />
+        <Route
+          element={<Register setUsername={setUsername} setRole={setRole} />}
+          path="/register"
+        />
+        <Route
+          element={<Login setUsername={setUsername} setRole={setRole} />}
+          path="/login"
+        />
+        <Route
+          element={<Leaderboard username={username} />}
+          path="/leaderboard"
+        />
         <Route element={<ProblemList />} path="/problems" />
         <Route element={<ProblemDetail />} path="/problem/:id" />
         <Route element={<ProblemUpdate />} path="/problem-update/:id" />

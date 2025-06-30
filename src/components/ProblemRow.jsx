@@ -20,6 +20,8 @@ const ProblemRow = ({ id, name, difficulty, author }) => {
     }
   };
 
+  const role = localStorage.getItem("role");
+
   return (
     <div className="flex items-center justify-between px-4 py-2 card rounded-md text-sm mb-2">
       {/* Problem ID */}
@@ -33,13 +35,19 @@ const ProblemRow = ({ id, name, difficulty, author }) => {
         {name}
       </Link>
 
-      <Link to={`/problem-update/${id}`} className="cursor-pointer mx-2">
+      <Link
+        to={`/problem-update/${id}`}
+        className={`cursor-pointer mx-2 
+      ${role === "Student" ? "hidden disabled" : ""}`}
+      >
         <RxUpdate className="secondary-text hover:primary-text transition" />
       </Link>
 
-      <button className="cursor-pointer mx-2" onClick={handleDelete}>
-        <RiDeleteBin5Line className="secondary-text hover:primary-text transition" />
-      </button>
+      {role !== "Student" && (
+        <button className="cursor-pointer mx-2" onClick={handleDelete}>
+          <RiDeleteBin5Line className="secondary-text hover:primary-text transition" />
+        </button>
+      )}
 
       <span
         className={`px-2 py-1 rounded text-xs font-semibold ${

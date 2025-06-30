@@ -35,7 +35,7 @@ const CodeEditor = ({ id }) => {
       const response = await apiClient.post("/submit", {
         language: language,
         code: code,
-        problem: id,
+        problem_id: id,
       });
       setVerdict(response.data.verdict);
       toast.info("Code Submitted Successfully");
