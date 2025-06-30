@@ -1,3 +1,5 @@
+import SubmissionsList from "./SubmissionsList";
+
 const renderContent = ({
   activeTab,
   detail,
@@ -28,20 +30,7 @@ const renderContent = ({
           {userSubmissions.length === 0 ? (
             <p>No submissions yet.</p>
           ) : (
-            <ul className="space-y-2">
-              {userSubmissions.map((submission, index) => (
-                <li key={index} className="bg-[#3a3b3c] p-3 rounded shadow-md">
-                  <p>
-                    <span className="font-bold">Language:</span>{" "}
-                    {submission.language}
-                  </p>
-                  <p>
-                    <span className="font-bold">Verdict:</span>{" "}
-                    {submission.verdict}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <SubmissionsList submissions={userSubmissions} />
           )}
         </div>
       );
@@ -53,20 +42,7 @@ const renderContent = ({
           {allSubmissions.length === 0 ? (
             <p>No submissions yet.</p>
           ) : (
-            <ul className="space-y-2">
-              {allSubmissions.map((submission, index) => (
-                <li key={index} className="bg-[#3a3b3c] p-3 rounded shadow-md">
-                  <p>
-                    <span className="font-bold">Language:</span>{" "}
-                    {submission.language}
-                  </p>
-                  <p>
-                    <span className="font-bold">Verdict:</span>{" "}
-                    {submission.verdict}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <SubmissionsList submissions={allSubmissions} />
           )}
         </div>
       );

@@ -7,9 +7,9 @@ const CodeEditor = ({ id }) => {
   const [activeTab, setActiveTab] = useState("input");
   const [language, setLanguage] = useState("cpp");
   const [code, setCode] = useState("");
-  const [input, setInput] = useState();
-  const [output, setOutput] = useState();
-  const [verdict,setVerdict] = useState();
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
+  const [verdict, setVerdict] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleRun = async () => {
@@ -99,7 +99,7 @@ const CodeEditor = ({ id }) => {
             output={output}
             loading={loading}
             input={input}
-            verdict = {verdict}
+            verdict={verdict}
           />
         }
       </div>
