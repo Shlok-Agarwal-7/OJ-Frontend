@@ -13,38 +13,55 @@ const CodeEditor = ({ id }) => {
   const [loading, setLoading] = useState(false);
 
   const handleRun = async () => {
+    setLoading(true);
+
+    const runCodePromise = apiClient.post("/execute", {
+      language: language,
+      code: code,
+      input_data: input,
+    });
+
+    toast.promise(runCodePromise, {
+      loading: "Running your code..",
+      success: (res) => {
+        setOutput(res.data.output);
+        return "Code ran Successfully!";
+      },
+      error: "There was an error running your code",
+    });
+
     try {
-      setLoading(true);
-      const response = await apiClient.post("/execute", {
-        language: language,
-        code: code,
-        input_data: input,
-      });
-      setOutput(response.data.output);
-      toast.success("Code Ran Sucessfully");
-    } catch (e) {
-      toast.error("There was a error executing the code");
-    }
-    setLoading(false);
+      await runCodePromise;
+    } catch (e) {}
+
     setActiveTab("output");
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      const response = await apiClient.post("/submit", {
-        language: language,
-        code: code,
-        problem_id: id,
-      });
-      setVerdict(response.data.verdict);
-      toast.info("Code Submitted Successfully");
-    } catch (e) {
-      toast.error("There was server error at our side");
-      console.log(e);
-    }
     setLoading(true);
+
+    const SubmitCodePromise = apiClient.post("/execute", {
+      language: language,
+      code: code,
+      problem_id: id,
+    });
+
+    toast.promise(SubmitCodePromise, {
+      loading: "Try all testcases...",
+      success: (res) => {
+        setVerdict(res.data.verdict);
+        return "Code Submitted  Successfully!";
+      },
+      error: "There was an error running your code",
+    });
+
+    try {
+      await SubmitCodePromise;
+    } catch (e) {}
+
     setActiveTab("verdict");
+    setLoading(false);
   };
 
   return (
@@ -107,13 +124,19 @@ const CodeEditor = ({ id }) => {
       {/* Bottom Buttons */}
       <div className="mt-auto pt-4 flex justify-end gap-4">
         <button
-          className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded"
+          disabled={loading}
+          className={`bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           onClick={handleRun}
         >
           Run
         </button>
         <button
-          className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded"
+          disabled={loading}
+          className={`bg-green-600 hover:bg-green-500 px-4 py-2 rounded ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
           onClick={handleSubmit}
         >
           Submit

@@ -24,30 +24,76 @@ const ProblemList = () => {
   const [problems, setProblems] = useState([]);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [difficultyFilter, setDifficultyFilter] = useState(new Set());
 
-  const filteredProblems = problems.filter((problem) =>
-    problem.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredProblems = problems.filter((problem) => {
+    const matchesTitle = problem.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+
+    const matchesDiffficulty =
+      difficultyFilter.size === 0 || difficultyFilter.has(problem.difficulty);
+
+    return matchesTitle && matchesDiffficulty;
+  });
+
+  const toggleDifficulty = (level) => {
+    setDifficultyFilter((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(level)) {
+        newSet.delete(level);
+      } else {
+        newSet.add(level);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <div className="min-h-screen primary primary-text p-6">
       <h1 className="text-2xl font-bold mb-4">🧩 Problem List</h1>
-      <div className="flex justify-between mb-4">
-        <div className="relative w-1/4">
-          <BiSearchAlt2 className="absolute left-2 top-2.5 h-5 w-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search Problems"
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
-            className="card-color rounded-md p-2 pl-9 w-full bg-[#3a3b3c] text-white outline-none"
-          />
+      <div className="flex justify-between mb-4 items-center">
+        <div className="flex gap-4 items-center w-2/3">
+          {/* Search bar */}
+          <div className="relative w-full max-w-sm">
+            <BiSearchAlt2 className="absolute left-2 top-2.5 h-5 w-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search Problems"
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+              className="card-color rounded-md p-2 pl-9 w-full bg-[#3a3b3c] text-white outline-none"
+            />
+          </div>
+
+          {/* Difficulty Filter Dropdown */}
+          <details className="dropdown">
+            <summary className="btn btn-sm bg-[#3a3b3c] text-white border-none hover:bg-[#4a4b4c]">
+              Filter by Difficulty
+            </summary>
+            <ul className="menu dropdown-content bg-base-100 rounded-box z-10 w-40 p-2 shadow">
+              {["Easy", "Medium", "Hard"].map((level) => (
+                <li key={level}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={difficultyFilter.has(level)}
+                      onChange={() => toggleDifficulty(level)}
+                      className="checkbox checckbox-sm"
+                    />
+                    <span>{level}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </details>
         </div>
 
+        {/* Add New Problem Button */}
         <Link to="/problem-create">
           <button
-            className={`bg-blue-500 hover:bg-blue-400 rounded-md p-2 ${
+            className={`bg-blue-500 hover:bg-blue-400 rounded-md px-4 py-2 ${
               role === "Student" ? "hidden disabled" : ""
             }`}
           >

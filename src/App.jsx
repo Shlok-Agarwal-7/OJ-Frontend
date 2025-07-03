@@ -9,6 +9,7 @@ import ProblemDetail from "./pages/ProblemDetail";
 import ProblemUpdate from "./pages/ProblemUpdate";
 import Navbar from "./components/Navbar";
 import CreateProblemPage from "./pages/ProblemCreate";
+import ProfilePage from "./pages/ProfilePage"
 
 function App() {
   const [username, setUsername] = useState("");
@@ -38,6 +39,7 @@ function App() {
         <Route element={<ProblemDetail />} path="/problem/:id" />
         <Route element={<ProblemUpdate />} path="/problem-update/:id" />
         <Route element={<CreateProblemPage />} path="/problem-create" />
+        <Route element = {<ProfilePage/>} path = "/profile/:username"/>
       </Routes>
     </>
   );
