@@ -1,4 +1,5 @@
 import SubmissionsList from "./SubmissionsList";
+import Markdown from "react-markdown";
 
 const renderContent = ({
   activeTab,
@@ -11,14 +12,14 @@ const renderContent = ({
       return (
         <>
           <h2 className="text-xl font-semibold mb-4">{detail?.title}</h2>
-          <p className="mb-2">{detail?.question}</p>
-          <h3 className="mt-4 mb-2 font-bold">Input:</h3>
+          <div className="mb-2">
+            <Markdown>{detail?.question}</Markdown>
+          </div>
+          <h3 className="mt-4 mb-2 font-bold">Sample Input:</h3>
+          <pre className="bg-[#3a3b3c] p-2 rounded">{detail?.sample_input}</pre>
+          <h3 className="mt-4 mb-2 font-bold">Sample Output:</h3>
           <pre className="bg-[#3a3b3c] p-2 rounded">
-            {detail?.testcases[0]?.input}
-          </pre>
-          <h3 className="mt-4 mb-2 font-bold">Output:</h3>
-          <pre className="bg-[#3a3b3c] p-2 rounded">
-            {detail?.testcases[0]?.output}
+            {detail?.sample_output}
           </pre>
         </>
       );

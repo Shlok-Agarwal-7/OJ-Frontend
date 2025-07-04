@@ -3,7 +3,7 @@ import { RxUpdate } from "react-icons/rx";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import apiClient from "../backend";
 
-const ProblemRow = ({ id, name, difficulty, author }) => {
+const ProblemRow = ({ id, name, difficulty, author, tags }) => {
   const difficultyColor = {
     Easy: "bg-green-600 text-white",
     Medium: "bg-yellow-500 text-black",
@@ -34,7 +34,15 @@ const ProblemRow = ({ id, name, difficulty, author }) => {
       >
         {name}
       </Link>
-
+      <div>
+        {tags.map((tag,idx) => {
+          return (
+            <div key={idx} className="badge badge-soft badge-primary">
+              {tag}
+            </div>
+          );
+        })}
+      </div>
       <Link
         to={`/problem-update/${id}`}
         className={`cursor-pointer mx-2 

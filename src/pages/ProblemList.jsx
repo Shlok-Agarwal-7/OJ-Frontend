@@ -25,16 +25,20 @@ const ProblemList = () => {
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState(new Set());
+  const [tagFilter, setTagFilter] = useState(new Set());
 
   const filteredProblems = problems.filter((problem) => {
     const matchesTitle = problem.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
 
-    const matchesDiffficulty =
+    const matchesDifficulty =
       difficultyFilter.size === 0 || difficultyFilter.has(problem.difficulty);
 
-    return matchesTitle && matchesDiffficulty;
+    const matchesTags =
+      tagFilter.size === 0 || problem.tags.some((tag) => tagFilter.has(tag)); // tag is a string
+
+    return matchesTitle && matchesDifficulty && matchesTags;
   });
 
   const toggleDifficulty = (level) => {
@@ -44,6 +48,18 @@ const ProblemList = () => {
         newSet.delete(level);
       } else {
         newSet.add(level);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleTag = (tag) => {
+    setTagFilter((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(tag)) {
+        newSet.delete(tag);
+      } else {
+        newSet.add(tag);
       }
       return newSet;
     });
@@ -90,6 +106,28 @@ const ProblemList = () => {
           </details>
         </div>
 
+        {/* Tag Filter Dropdown */}
+        <details className="dropdown">
+          <summary className="btn btn-sm bg-[#3a3b3c] text-white border-none hover:bg-[#4a4b4c]">
+            Filter by Tags
+          </summary>
+          <ul className="menu dropdown-content bg-base-100 rounded-box z-10 w-48 p-2 shadow max-h-60 overflow-auto">
+            {[...new Set(problems.flatMap((p) => p.tags))].map((tag) => (
+              <li key={tag}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={tagFilter.has(tag)}
+                    onChange={() => toggleTag(tag)}
+                    className="checkbox checkbox-sm"
+                  />
+                  <span>{tag}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </details>
+
         {/* Add New Problem Button */}
         <Link to="/problem-create">
           <button
@@ -120,6 +158,7 @@ const ProblemList = () => {
               name={problem.title}
               difficulty={problem.difficulty}
               author={problem.created_by}
+              tags={problem.tags}
             />
           ))
         ) : (
