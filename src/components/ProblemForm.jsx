@@ -60,6 +60,10 @@ const ProblemForm = () => {
       success: "Problem Created!",
       error: "There was a error creating your problem",
     });
+
+    try{
+      await responsePromise
+    }catch(e){}
   };
   return (
     <div className="max-w-2xl mx-auto  text-white p-6 rounded-lg shadow">

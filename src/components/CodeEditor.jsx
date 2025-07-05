@@ -41,7 +41,7 @@ const CodeEditor = ({ id }) => {
   const handleSubmit = async () => {
     setLoading(true);
 
-    const SubmitCodePromise = apiClient.post("/execute", {
+    const SubmitCodePromise = apiClient.post("/submit", {
       language: language,
       code: code,
       problem_id: id,

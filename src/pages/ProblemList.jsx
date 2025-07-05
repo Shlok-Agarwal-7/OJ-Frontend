@@ -3,6 +3,7 @@ import ProblemRow from "../components/ProblemRow";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import apiClient from "../backend";
+import Filter from "../components/Filter";
 
 const ProblemList = () => {
   useEffect(() => {
@@ -84,49 +85,21 @@ const ProblemList = () => {
           </div>
 
           {/* Difficulty Filter Dropdown */}
-          <details className="dropdown">
-            <summary className="btn btn-sm bg-[#3a3b3c] text-white border-none hover:bg-[#4a4b4c]">
-              Filter by Difficulty
-            </summary>
-            <ul className="menu dropdown-content bg-base-100 rounded-box z-10 w-40 p-2 shadow">
-              {["Easy", "Medium", "Hard"].map((level) => (
-                <li key={level}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={difficultyFilter.has(level)}
-                      onChange={() => toggleDifficulty(level)}
-                      className="checkbox checckbox-sm"
-                    />
-                    <span>{level}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </details>
-        </div>
+          <Filter
+            toggleFilter={toggleDifficulty}
+            category={"Difficulty Filter"}
+            filter={difficultyFilter}
+            list={["Easy", "Medium", "Hard"]}
+          />
 
-        {/* Tag Filter Dropdown */}
-        <details className="dropdown">
-          <summary className="btn btn-sm bg-[#3a3b3c] text-white border-none hover:bg-[#4a4b4c]">
-            Filter by Tags
-          </summary>
-          <ul className="menu dropdown-content bg-base-100 rounded-box z-10 w-48 p-2 shadow max-h-60 overflow-auto">
-            {[...new Set(problems.flatMap((p) => p.tags))].map((tag) => (
-              <li key={tag}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={tagFilter.has(tag)}
-                    onChange={() => toggleTag(tag)}
-                    className="checkbox checkbox-sm"
-                  />
-                  <span>{tag}</span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </details>
+          {/* Tag Filter Dropdown */}
+          <Filter
+            toggleFilter={toggleTag}
+            category={"Tags Filter"}
+            filter={tagFilter}
+            list={[...new Set(problems.flatMap((p) => p.tags))]}
+          />
+        </div>
 
         {/* Add New Problem Button */}
         <Link to="/problem-create">

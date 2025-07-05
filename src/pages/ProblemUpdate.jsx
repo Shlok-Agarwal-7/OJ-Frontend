@@ -79,14 +79,17 @@ const UpdateProblemPage = () => {
       payload.testcases = testcases[0];
     }
 
-    const responsePromise =  apiClient
-      .patch(`problems/${id}/update`, payload)
-    
-    toast.promise(responsePromise,{
-      loading : "updating your problem",
-      success : "Problem updated successfully",
-      error : "There was a error updating your problem"
-    })
+    const responsePromise = apiClient.patch(`problems/${id}/update`, payload);
+
+    toast.promise(responsePromise, {
+      loading: "updating your problem",
+      success: "Problem updated successfully",
+      error: "There was a error updating your problem",
+    });
+
+    try {
+      await responsePromise;
+    } catch (e) {}
   };
 
   return (
@@ -154,7 +157,7 @@ const UpdateProblemPage = () => {
           {/* Sample Input */}
           <div>
             <label className="block mb-1 text-sm">Sample Input</label>
-            <input
+            <textarea
               name="sample_input"
               value={existingProblem.sample_input}
               onChange={(e) =>
@@ -172,7 +175,7 @@ const UpdateProblemPage = () => {
           {/* Sample Output */}
           <div>
             <label className="block mb-1 text-sm">Sample Output</label>
-            <input
+            <textarea
               name="sample_output"
               value={existingProblem.sample_output}
               onChange={(e) =>
