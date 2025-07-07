@@ -10,6 +10,7 @@ export default function Leaderboard() {
   const [localRank, setLocalRank] = useState(false);
 
   const navigate = useNavigate();
+  
   const fetchTopUser = async () => {
     try {
       const response = await apiClient.get(`/api/top-users/?range=${range}`);

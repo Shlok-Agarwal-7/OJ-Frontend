@@ -35,6 +35,12 @@ export default function Navbar() {
           Problems
         </Link>
         <Link
+          to="/contests"
+          className="hover:text-blue-400 text-white transition"
+        >
+          Contests
+        </Link>
+        <Link
           to="/leaderboard"
           className="hover:text-blue-400 text-white transition"
         >

@@ -9,7 +9,9 @@ import ProblemDetail from "./pages/ProblemDetail";
 import ProblemUpdate from "./pages/ProblemUpdate";
 import Navbar from "./components/Navbar";
 import CreateProblemPage from "./pages/ProblemCreate";
-import ProfilePage from "./pages/ProfilePage"
+import ProfilePage from "./pages/ProfilePage";
+import ContestsPage from "./pages/ContestsPage";
+import ContestDetailPage from "./pages/ContestDetailPage";
 
 function App() {
   const [username, setUsername] = useState("");
@@ -39,7 +41,10 @@ function App() {
         <Route element={<ProblemDetail />} path="/problem/:id" />
         <Route element={<ProblemUpdate />} path="/problem-update/:id" />
         <Route element={<CreateProblemPage />} path="/problem-create" />
-        <Route element = {<ProfilePage/>} path = "/profile/:username"/>
+        <Route element={<ProfilePage />} path="/profile/:username" />
+        <Route element={<ContestsPage />} path="/contests" />
+        <Route element={<ContestDetailPage />} path="/contests/:id" />
+        {/* <Route element={<ContestDetailPage />} path="/contests/:id" /> */}
       </Routes>
     </>
   );
