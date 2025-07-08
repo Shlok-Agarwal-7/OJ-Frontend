@@ -1,11 +1,13 @@
 import SubmissionsList from "./SubmissionsList";
 import Markdown from "react-markdown";
+import AIHintBox from "./aiHintBox";
 
 const renderContent = ({
   activeTab,
   detail,
   userSubmissions,
   allSubmissions,
+  isContest,
 }) => {
   switch (activeTab) {
     case "problem":
@@ -21,6 +23,9 @@ const renderContent = ({
           <pre className="bg-[#3a3b3c] p-2 rounded">
             {detail?.sample_output}
           </pre>
+          {!isContest && (
+            <AIHintBox title={detail?.title} question={detail?.question} />
+          )}
         </>
       );
 

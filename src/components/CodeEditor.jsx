@@ -3,7 +3,7 @@ import CodeEditorTabs from "./CodeEditorTabs";
 import apiClient from "../backend";
 import { toast } from "sonner";
 
-const CodeEditor = ({ id }) => {
+const CodeEditor = ({ id, cid, isContest }) => {
   const [activeTab, setActiveTab] = useState("input");
   const [language, setLanguage] = useState("cpp");
   const [code, setCode] = useState("");
@@ -12,78 +12,154 @@ const CodeEditor = ({ id }) => {
   const [verdict, setVerdict] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // const handleRun = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await apiClient.post("/execute", {
+  //       language: language,
+  //       code: code,
+  //       input_data: input,
+  //     });
+  //     const task_id = res.data.task_id;
+
+  //     toast.loading("Running your Code");
+
+  //     const poll = setInterval(async () => {
+  //       const res = await apiClient.get(`/check-run-status/${task_id}`);
+  //       if (res.data.status == "SUCCESS") {
+  //         clearInterval(poll);
+  //         toast.dismiss();
+  //         toast.success("Code ran successfully");
+  //         setOutput(res.data.output);
+  //         setActiveTab("output");
+  //         setLoading(false);
+  //       }
+  //     }, 1000);
+
+  //     setTimeout(() => {
+  //       clearInterval(poll);
+  //       toast.dismiss();
+  //       toast.error("Run timed out.");
+  //       setLoading(false);
+  //     }, 15000);
+  //   } catch (e) {
+  //     toast.error("There was an error running your code");
+  //     setLoading(false);
+  //   }
+  // };
+
+  // // const handleSubmit = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await apiClient.post("/submit", {
+  //       language: language,
+  //       code: code,
+  //       problem_id: id,
+  //     });
+
+  //     const submission_id = res.data.submission_id;
+  //     toast.loading("Running against testcases");
+
+  //     const poll = setInterval(async () => {
+  //       const res = await apiClient.get(
+  //         `/check-submit-status/${submission_id}`
+  //       );
+  //       if (res.data.verdict != "pending") {
+  //         clearInterval(poll);
+  //         toast.dismiss();
+  //         toast.success("Problem submitted successfully");
+  //         setVerdict(res.data.verdict);
+  //         setActiveTab("verdict");
+  //         setLoading(false);
+  //       }
+  //     }, 1000);
+
+  //     setTimeout(() => {
+  //       clearInterval(poll);
+  //       toast.dismiss();
+  //       toast.error("Run timed out.");
+  //       setLoading(false);
+  //     }, 15000);
+  //   } catch (e) {
+  //     toast.error("There was a issue submitting your code");
+  //     setLoading(false);
+  //   }
+  // };
   const handleRun = async () => {
     setLoading(true);
+
+    const runCodePromise = apiClient.post("/execute", {
+      language: language,
+      code: code,
+      input_data: input,
+    });
+
+    toast.promise(runCodePromise, {
+      loading: "Running your code..",
+      success: (res) => {
+        setOutput(res.data.output);
+        return "Code ran Successfully!";
+      },
+      error: "There was an error running your code",
+    });
+
     try {
-      const res = await apiClient.post("/execute", {
-        language: language,
-        code: code,
-        input_data: input,
-      });
-      const task_id = res.data.task_id;
+      await runCodePromise;
+    } catch (e) {}
 
-      toast.loading("Running your Code");
-
-      const poll = setInterval(async () => {
-        const res = await apiClient.get(`/check-run-status/${task_id}`);
-        if (res.data.status == "SUCCESS") {
-          clearInterval(poll);
-          toast.dismiss();
-          toast.success("Code ran successfully");
-          setOutput(res.data.output);
-          setActiveTab("output");
-          setLoading(false);
-        }
-      }, 1000);
-
-      setTimeout(() => {
-        clearInterval(poll);
-        toast.dismiss();
-        toast.error("Run timed out.");
-        setLoading(false);
-      }, 15000);
-    } catch (e) {
-      toast.error("There was an error running your code");
-      setLoading(false);
-    }
+    setActiveTab("output");
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
     setLoading(true);
-    try {
-      const res = await apiClient.post("/submit", {
+    let submitCodePromise;
+    if (isContest) {
+      submitCodePromise = apiClient.post(`/contests/${cid}/submit`, {
         language: language,
         code: code,
         problem_id: id,
       });
-
-      const submission_id = res.data.submission_id;
-      toast.loading("Running against testcases");
-
-      const poll = setInterval(async () => {
-        const res = await apiClient.get(
-          `/check-submit-status/${submission_id}`
-        );
-        if (res.data.verdict != "pending") {
-          clearInterval(poll);
-          toast.dismiss();
-          toast.success("Problem submitted successfully");
+      toast.promise(submitCodePromise, {
+        loading: "Trying all Testcases",
+        success: (res) => {
           setVerdict(res.data.verdict);
-          setActiveTab("verdict");
-          setLoading(false);
-        }
-      }, 1000);
+          return `Code Submitted : ${verdict}`;
+        },
+        error: (error) => {
+          return error.status !== 403
+            ? "There was a error running your code"
+            : "Contest has ended";
+        },
+      });
+      try {
+        await submitCodePromise;
+      } catch (error) {}
 
-      setTimeout(() => {
-        clearInterval(poll);
-        toast.dismiss();
-        toast.error("Run timed out.");
-        setLoading(false);
-      }, 15000);
-    } catch (e) {
-      toast.error("There was a issue submitting your code");
-      setLoading(false);
+      try {
+        await submitCodePromise;
+      } catch (error) {}
+    } else {
+      submitCodePromise = apiClient.post("/submit", {
+        language: language,
+        code: code,
+        problem_id: id,
+      });
+      toast.promise(submitCodePromise, {
+        loading: "Trying all Testcases",
+        success: (res) => {
+          setVerdict(res.data.verdict);
+          return `Code Submitted : ${verdict}`;
+        },
+        error: "Therw was a error running your code",
+      });
+
+      try {
+        await submitCodePromise;
+      } catch (error) {}
     }
+    setActiveTab("verdict");
+    setLoading(false);
   };
 
   return (

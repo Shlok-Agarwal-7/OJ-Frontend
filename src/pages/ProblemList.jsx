@@ -127,7 +127,7 @@ const ProblemList = () => {
           filteredProblems.map((problem) => (
             <ProblemRow
               key={problem.id}
-              id={problem.id}
+              pid={problem.id}
               name={problem.title}
               difficulty={problem.difficulty}
               author={problem.created_by}

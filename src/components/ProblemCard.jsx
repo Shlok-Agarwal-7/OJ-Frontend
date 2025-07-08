@@ -2,11 +2,11 @@ import { useState } from "react";
 import ProblemCardTabs from "./ProblemCardTabs";
 import apiClient from "../backend";
 
-
-const ProblemCard = ({ detail, id }) => {
+const ProblemCard = ({ detail, id, isContest }) => {
   const [userSubmissions, setUserSubmissions] = useState([]);
   const [allSubmissions, setAllSubmissions] = useState([]);
-
+  const [activeTab, setActiveTab] = useState("problem");
+  
   const handleUserSubmission = async () => {
     setActiveTab("my");
     apiClient
@@ -30,8 +30,6 @@ const ProblemCard = ({ detail, id }) => {
         console.log(error);
       });
   };
-
-  const [activeTab, setActiveTab] = useState("problem");
 
   return (
     <div className="bg-[#2e2e40] p-6 rounded-lg shadow card-color h-full flex flex-col">
@@ -62,20 +60,22 @@ const ProblemCard = ({ detail, id }) => {
               My Submissions
             </button>
           </li>
-          <li>
-            <button
-              className={`px-3 py-1 rounded-t ${
-                activeTab === "all"
-                  ? "bg-[#3a3b3c] text-white"
-                  : "text-gray-400"
-              }`}
-              onClick={() => {
-                handleAllSubmissions();
-              }}
-            >
-              All Submissions
-            </button>
-          </li>
+          {!isContest && (
+            <li>
+              <button
+                className={`px-3 py-1 rounded-t ${
+                  activeTab === "all"
+                    ? "bg-[#3a3b3c] text-white"
+                    : "text-gray-400"
+                }`}
+                onClick={() => {
+                  handleAllSubmissions();
+                }}
+              >
+                All Submissions
+              </button>
+            </li>
+          )}
         </ul>
       </div>
 
@@ -87,6 +87,7 @@ const ProblemCard = ({ detail, id }) => {
             detail={detail}
             userSubmissions={userSubmissions}
             allSubmissions={allSubmissions}
+            isContest={isContest}
           />
         }
       </div>

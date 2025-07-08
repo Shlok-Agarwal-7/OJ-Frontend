@@ -3,7 +3,15 @@ import { RxUpdate } from "react-icons/rx";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import apiClient from "../backend";
 
-const ProblemRow = ({ id, name, difficulty, author, tags }) => {
+const ProblemRow = ({
+  cid = null,
+  pid,
+  name,
+  difficulty,
+  author,
+  tags,
+  contestMode,
+}) => {
   const difficultyColor = {
     Easy: "bg-green-600 text-white",
     Medium: "bg-yellow-500 text-black",
@@ -12,7 +20,7 @@ const ProblemRow = ({ id, name, difficulty, author, tags }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await apiClient.delete(`/problems/${id}/delete`);
+      const response = await apiClient.delete(`/problems/${pid}/delete`);
       console.log(response);
       window.location.reload();
     } catch (error) {
@@ -25,17 +33,17 @@ const ProblemRow = ({ id, name, difficulty, author, tags }) => {
   return (
     <div className="flex items-center justify-between px-4 py-2 card-color rounded-md text-sm mb-2">
       {/* Problem ID */}
-      <span className="w-6 text-gray-300">{id}</span>
+      <span className="w-6 text-gray-300">{pid}</span>
 
       {/* Problem Name */}
       <Link
-        to={`/problem/${id}`}
+        to={contestMode ? `/contests/${cid}/problem/${pid}` : `/problem/${pid}`}
         className="flex-1 primary-text hover:underline cursor-pointer pl-4"
       >
         {name}
       </Link>
       <div>
-        {tags.map((tag,idx) => {
+        {tags.map((tag, idx) => {
           return (
             <div key={idx} className="badge badge-soft badge-primary">
               {tag}
@@ -44,7 +52,7 @@ const ProblemRow = ({ id, name, difficulty, author, tags }) => {
         })}
       </div>
       <Link
-        to={`/problem-update/${id}`}
+        to={`/problem-update/${pid}`}
         className={`cursor-pointer mx-2 
       ${role === "Student" ? "hidden disabled" : ""}`}
       >

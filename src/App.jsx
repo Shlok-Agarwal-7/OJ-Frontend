@@ -38,13 +38,13 @@ function App() {
           path="/leaderboard"
         />
         <Route element={<ProblemList />} path="/problems" />
-        <Route element={<ProblemDetail />} path="/problem/:id" />
+        <Route element={<ProblemDetail />} path="/problem/:pid" />
         <Route element={<ProblemUpdate />} path="/problem-update/:id" />
         <Route element={<CreateProblemPage />} path="/problem-create" />
         <Route element={<ProfilePage />} path="/profile/:username" />
         <Route element={<ContestsPage />} path="/contests" />
         <Route element={<ContestDetailPage />} path="/contests/:id" />
-        {/* <Route element={<ContestDetailPage />} path="/contests/:id" /> */}
+        <Route element={<ProblemDetail />} path="/contests/:cid/problem/:pid" />
       </Routes>
     </>
   );

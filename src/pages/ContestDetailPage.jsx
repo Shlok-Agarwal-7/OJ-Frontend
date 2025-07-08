@@ -1,35 +1,3 @@
-// import { useEffect } from "react";
-// import apiClient from "../backend";
-// import { useParams } from "react-router-dom";
-
-// const ContestDetailPage = () => {
-//   const { id } = useParams();
-//   const fetchContestDetials = async () => {
-//     try {
-//       const res = await apiClient.get(`/contests/${id}`);
-//       console.log(res);
-//     } catch (e) {
-//       console.log(error);
-//     }
-//   };
-//   const fetchContestProblems = async () => {
-//     try {
-//       const res = await apiClient.get(`/contests/${id}/problems`);
-//       console.log(res);
-//     } catch (e) {
-//       console.log(error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchContestDetials();
-//     fetchContestProblems();
-//   }, []);
-
-//   return <div>ContestDetailPage</div>;
-// };
-
-// export default ContestDetailPage;
 import { useEffect, useState } from "react";
 import apiClient from "../backend";
 import { useParams } from "react-router-dom";
@@ -87,6 +55,7 @@ const ContestDetailPage = () => {
   const end = dayjs(contest.end_time);
 
   const isRunning = now.isAfter(start) && now.isBefore(end);
+  const isEnded = now.isAfter(end);
 
   const getTimeLeft = () => {
     const diff = end.diff(now);
@@ -107,9 +76,6 @@ const ContestDetailPage = () => {
           <strong>End Time:</strong> {end.format("YYYY-MM-DD HH:mm")}
         </div>
         <div>
-          <strong>Duration:</strong> {contest.duration || "Not specified"}
-        </div>
-        <div>
           <strong>Status:</strong>{" "}
           <span>
             {isRunning ? "Running" : now.isBefore(start) ? "Upcoming" : "Ended"}
@@ -122,21 +88,31 @@ const ContestDetailPage = () => {
         )}
       </div>
 
-      <hr className="my-6" />
-
       <h2 className="text-2xl font-semibold mb-4">Problems</h2>
       <div className="space-y-3">
-        {problems.length === 0 && <p>No problems added yet.</p>}
-        {problems.map((problem) => (
-          <ProblemRow
-            key={problem.order}
-            id={problem.problem.id}
-            name={problem.problem.title}
-            difficulty={problem.problem.difficulty}
-            author={problem.problem.created_by}
-            tags={problem.problem.tags}
-          />
-        ))}
+        {!isEnded && !isRunning && (
+          <p>Comeback on contest time to see problems</p>
+        )}
+        {(isEnded || isRunning) && (
+          <>
+            {problems.length === 0 ? (
+              <p>No problems added yet.</p>
+            ) : (
+              problems.map((problem) => (
+                <ProblemRow
+                  cid={id}
+                  key={problem.order}
+                  pid={problem.problem.id}
+                  name={problem.problem.title}
+                  difficulty={problem.problem.difficulty}
+                  author={problem.problem.created_by}
+                  tags={problem.problem.tags}
+                  contestMode={true}
+                />
+              ))
+            )}
+          </>
+        )}
       </div>
     </div>
   );
