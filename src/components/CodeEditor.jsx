@@ -2,15 +2,56 @@ import { useState } from "react";
 import CodeEditorTabs from "./CodeEditorTabs";
 import apiClient from "../backend";
 import { toast } from "sonner";
+import Editor from "@monaco-editor/react";
 
 const CodeEditor = ({ id, cid, isContest }) => {
   const [activeTab, setActiveTab] = useState("input");
   const [language, setLanguage] = useState("cpp");
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(
+    `#include <iostream>
+using namespace std;
+
+int main() {
+    // your code goes here
+    return 0;
+}
+`
+  );
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [verdict, setVerdict] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const monacoLanguageMap = {
+    cpp: "cpp",
+    py: "python",
+    java: "java",
+  };
+  const boilerplates = {
+    cpp: `#include <iostream>
+using namespace std;
+
+int main() {
+    // your code goes here
+    return 0;
+}
+`,
+    py: `def main():
+    # your code goes here
+    pass
+
+if __name__ == "__main__":
+    main()
+`,
+    java: `import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        // your code goes here
+    }
+}
+`,
+  };
 
   // const handleRun = async () => {
   //   setLoading(true);
@@ -151,7 +192,7 @@ const CodeEditor = ({ id, cid, isContest }) => {
           setVerdict(res.data.verdict);
           return `Code Submitted : ${verdict}`;
         },
-        error: "Therw was a error running your code",
+        error: "There was a error running your code",
       });
 
       try {
@@ -171,7 +212,11 @@ const CodeEditor = ({ id, cid, isContest }) => {
         <label className="block text-gray-300 text-sm mb-1">Language</label>
         <select
           value={language}
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={(e) => {
+            const selectedLang = e.target.value;
+            setLanguage(selectedLang);
+            setCode(boilerplates[selectedLang]); // set boilerplate
+          }}
           className="bg-[#3a3b3c] text-gray-200 p-2 rounded w-full outline-none"
         >
           <option value="cpp">C++</option>
@@ -180,13 +225,26 @@ const CodeEditor = ({ id, cid, isContest }) => {
         </select>
       </div>
       {/* Code Textarea */}
-      <textarea
-        className="bg-[#3a3b3c] text-sm text-gray-200 p-4 rounded h-72 font-mono outline-none resize-none"
-        placeholder="// write your solution here..."
-        onChange={(e) => {
-          setCode(e.target.value);
-        }}
-      ></textarea>
+      <div className="rounded overflow-hidden mb-2" style={{ height: "300px" }}>
+        <Editor
+          height="100%"
+          language={monacoLanguageMap[language]}
+          theme="vs-dark"
+          value={code}
+          onChange={(value) => setCode(value)}
+          options={{
+            fontSize: 14,
+            minimap: { enabled: false },
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+            wordWrap: "on",
+            suggestOnTriggerCharacters: true,
+            tabCompletion: "on",
+            autoClosingBrackets: "always",
+            autoIndent: "full",
+          }}
+        />
+      </div>
 
       {/* Tab Navigation */}
       <div className="flex mt-4 space-x-2">

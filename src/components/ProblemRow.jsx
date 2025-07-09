@@ -42,14 +42,16 @@ const ProblemRow = ({
       >
         {name}
       </Link>
-      <div>
-        {tags.map((tag, idx) => {
-          return (
-            <div key={idx} className="badge badge-soft badge-primary">
-              {tag}
-            </div>
-          );
-        })}
+      <div className="flex gap-1 mr-1">
+        {cid !== null
+          ? ""
+          : tags.map((tag, idx) => {
+              return (
+                <div key={idx} className="badge badge-soft badge-primary">
+                  {tag}
+                </div>
+              );
+            })}
       </div>
       <Link
         to={`/problem-update/${pid}`}

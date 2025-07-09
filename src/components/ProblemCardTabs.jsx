@@ -17,6 +17,10 @@ const renderContent = ({
           <div className="mb-2">
             <Markdown>{detail?.question}</Markdown>
           </div>
+          <h3 className="mt-4 mb-2 font-bold">Time Limit & Memory Limit</h3>
+          <pre className="bg-[#3a3b3c] p-2 rounded">
+            {detail?.time_limit}s,{detail?.memory_limit} MB
+          </pre>
           <h3 className="mt-4 mb-2 font-bold">Sample Input:</h3>
           <pre className="bg-[#3a3b3c] p-2 rounded">{detail?.sample_input}</pre>
           <h3 className="mt-4 mb-2 font-bold">Sample Output:</h3>

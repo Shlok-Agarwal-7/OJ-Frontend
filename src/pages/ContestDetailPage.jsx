@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import ProblemRow from "../components/ProblemRow";
+import ContestTimer from "../components/ContestTimer";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -56,12 +57,8 @@ const ContestDetailPage = () => {
 
   const isRunning = now.isAfter(start) && now.isBefore(end);
   const isEnded = now.isAfter(end);
+  const isUpcoming = now.isBefore(start);
 
-  const getTimeLeft = () => {
-    const diff = end.diff(now);
-    const dur = dayjs.duration(diff);
-    return `${dur.hours()}h ${dur.minutes()}m ${dur.seconds()}s`;
-  };
 
   return (
     <div className="min-h-screen max-w-5xl mx-auto p-6">
@@ -83,17 +80,15 @@ const ContestDetailPage = () => {
         </div>
         {isRunning && (
           <div className="col-span-2 text-orange-500">
-            <strong>Time Left:</strong> {getTimeLeft()}
+            <ContestTimer start={start} end={end}/>
           </div>
         )}
       </div>
 
       <h2 className="text-2xl font-semibold mb-4">Problems</h2>
       <div className="space-y-3">
-        {!isEnded && !isRunning && (
-          <p>Comeback on contest time to see problems</p>
-        )}
-        {(isEnded || isRunning) && (
+        {isUpcoming && <p>Comeback on contest time to see problems</p>}
+        {isRunning && (
           <>
             {problems.length === 0 ? (
               <p>No problems added yet.</p>
@@ -108,6 +103,26 @@ const ContestDetailPage = () => {
                   author={problem.problem.created_by}
                   tags={problem.problem.tags}
                   contestMode={true}
+                />
+              ))
+            )}
+          </>
+        )}
+        {isEnded && (
+          <>
+            {problems.length === 0 ? (
+              <p>No problems added yet.</p>
+            ) : (
+              problems.map((problem) => (
+                <ProblemRow
+                  cid={id}
+                  key={problem.order}
+                  pid={problem.problem.id}
+                  name={problem.problem.title}
+                  difficulty={problem.problem.difficulty}
+                  author={problem.problem.created_by}
+                  tags={problem.problem.tags}
+                  contestMode={false}
                 />
               ))
             )}

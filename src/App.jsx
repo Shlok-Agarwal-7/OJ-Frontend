@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, matchPath } from "react-router-dom";
 import { useState } from "react";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
@@ -12,17 +12,26 @@ import CreateProblemPage from "./pages/ProblemCreate";
 import ProfilePage from "./pages/ProfilePage";
 import ContestsPage from "./pages/ContestsPage";
 import ContestDetailPage from "./pages/ContestDetailPage";
-
+import ContestCreateForm from "./pages/ContestCreatePage";
 function App() {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
 
   const location = useLocation();
-  const hideNavbar = ["/login", "/register", "/"];
+  const hideNavbar = [
+    "/login",
+    "/register",
+    "/",
+    "/contests/:cid/problem/:pid",
+  ];
+
+  const shouldHideNavbar = hideNavbar.some((pattern) =>
+    matchPath({ path: pattern, end: true }, location.pathname)
+  );
 
   return (
     <>
-      {!hideNavbar.includes(location.pathname) && <Navbar />}
+      {!shouldHideNavbar && <Navbar />}
       <Routes>
         <Route element={<Landing />} path="/" />
         <Route
@@ -45,6 +54,7 @@ function App() {
         <Route element={<ContestsPage />} path="/contests" />
         <Route element={<ContestDetailPage />} path="/contests/:id" />
         <Route element={<ProblemDetail />} path="/contests/:cid/problem/:pid" />
+        <Route element={<ContestCreateForm />} path="/Contests/create" />
       </Routes>
     </>
   );

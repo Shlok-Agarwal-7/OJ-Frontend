@@ -7,21 +7,33 @@ import Filter from "../components/Filter";
 
 const ProblemList = () => {
   useEffect(() => {
-    const fetchProblems = async () => {
+    const fetchWhiteListProblems = async () => {
       try {
-        const response = await apiClient.get("/problems");
+        const response = await apiClient.get("/problems/whitelist");
+        setWhiteListProblems(response.data);
         setProblems(response.data);
       } catch (e) {
         setError(e);
         console.log(error);
       }
     };
-
-    fetchProblems();
+    const fetchBlackListProblems = async () => {
+      try {
+        const response = await apiClient.get("/problems/blacklist");
+        setBlackListProblems(response.data);
+      } catch (e) {
+        setError(e);
+        console.log(e);
+      }
+    };
+    fetchWhiteListProblems();
+    fetchBlackListProblems();
   }, []);
 
   // states
   const role = localStorage.getItem("role");
+  const [whiteListProblems, setWhiteListProblems] = useState([]);
+  const [blackListProblems, setBlackListProblems] = useState([]);
   const [problems, setProblems] = useState([]);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -111,6 +123,27 @@ const ProblemList = () => {
             Add New Problem
           </button>
         </Link>
+
+        <button
+          className={`bg-blue-500 hover:bg-blue-400 rounded-md px-4 py-2 ${
+            role === "Student" ? "hidden disabled" : ""
+          }`}
+          onClick={() => {
+            setProblems(blackListProblems);
+          }}
+        >
+          Hidden Problems
+        </button>
+        <button
+          className={`bg-blue-500 hover:bg-blue-400 rounded-md px-4 py-2 ${
+            role === "Student" ? "hidden disabled" : ""
+          }`}
+          onClick={() => {
+            setProblems(whiteListProblems);
+          }}
+        >
+          Public Problems
+        </button>
       </div>
 
       {/* Header Row */}

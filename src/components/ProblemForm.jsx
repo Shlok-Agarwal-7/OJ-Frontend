@@ -8,9 +8,13 @@ const ProblemForm = () => {
   const [difficulty, setDifficulty] = useState("Easy");
   const [testcases, setTestcases] = useState([]);
   const [tags, setTags] = useState([]);
-  const [sampleInput, setSampleInput] = useState();
-  const [sampleOutput, setSampleOutput] = useState();
+  const [sampleInput, setSampleInput] = useState("");
+  const [sampleOutput, setSampleOutput] = useState("");
   const [availableTags, setAvailableTags] = useState([]);
+
+  const [blacklist, setBlacklist] = useState(false);
+  const [memoryLimit, setMemoryLimit] = useState(64);
+  const [timeLimit, setTimeLimit] = useState(1);
 
   useEffect(() => {
     apiClient
@@ -28,7 +32,6 @@ const ProblemForm = () => {
     if (!file) return;
 
     const reader = new FileReader();
-
     reader.onload = (event) => {
       try {
         const json = JSON.parse(event.target.result);
@@ -44,6 +47,7 @@ const ProblemForm = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
+
     const payload = {
       testcases: testcases[0],
       difficulty: difficulty,
@@ -52,21 +56,25 @@ const ProblemForm = () => {
       tags: tags,
       sample_input: sampleInput,
       sample_output: sampleOutput,
+      blacklist: blacklist,
+      memory_limit: memoryLimit,
+      time_limit: timeLimit,
     };
 
     const responsePromise = apiClient.post("problems/create", payload);
     toast.promise(responsePromise, {
       loading: "Creating Problem",
       success: "Problem Created!",
-      error: "There was a error creating your problem",
+      error: "There was an error creating your problem",
     });
 
-    try{
-      await responsePromise
-    }catch(e){}
+    try {
+      await responsePromise;
+    } catch (e) {}
   };
+
   return (
-    <div className="max-w-2xl mx-auto  text-white p-6 rounded-lg shadow">
+    <div className="max-w-2xl mx-auto text-white p-6 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">Create Problem</h2>
       <form className="space-y-4">
         {/* Title */}
@@ -111,6 +119,7 @@ const ProblemForm = () => {
           </select>
         </div>
 
+        {/* Sample Input */}
         <div>
           <label className="block mb-1 text-sm">Sample Input</label>
           <textarea
@@ -135,10 +144,10 @@ const ProblemForm = () => {
             required
           />
         </div>
+
         {/* Tags Section */}
         <div>
           <label className="block mb-1 text-sm text-white">Tags</label>
-
           <div className="grid grid-cols-2 gap-2">
             {availableTags.map((tag) => (
               <label key={tag} className="flex items-center space-x-2">
@@ -161,11 +170,11 @@ const ProblemForm = () => {
           </div>
         </div>
 
+        {/* Upload Testcases */}
         <div className="mb-4">
           <label className="block mb-1 text-sm font-medium text-white">
             Upload Testcases (JSON)
           </label>
-
           <input
             type="file"
             accept=".json"
@@ -173,7 +182,6 @@ const ProblemForm = () => {
             className="file-input file-input-sm file-input-bordered w-full bg-[#3a3b3c] text-white"
             required
           />
-
           {testcases.length > 0 && (
             <p className="mt-2 text-green-400 text-sm">
               ✔ {testcases.length} testcases loaded.
@@ -181,8 +189,52 @@ const ProblemForm = () => {
           )}
         </div>
 
-        {/* Submit */}
+        {/* Time Limit */}
+        <div>
+          <label className="block mb-1 text-sm text-white">
+            Time Limit (in seconds)
+          </label>
+          <input
+            type="number"
+            value={timeLimit}
+            onChange={(e) => setTimeLimit(parseInt(e.target.value))}
+            className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white"
+            placeholder="e.g., 1"
+            min={1}
+            required
+          />
+        </div>
 
+        {/* Memory Limit */}
+        <div>
+          <label className="block mb-1 text-sm text-white">
+            Memory Limit (in MB)
+          </label>
+          <input
+            type="number"
+            value={memoryLimit}
+            onChange={(e) => setMemoryLimit(parseInt(e.target.value))}
+            className="w-full p-2 rounded bg-[#3a3b3c] outline-none text-white"
+            placeholder="e.g., 256"
+            min={32}
+            required
+          />
+        </div>
+
+        {/* Blacklist */}
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={blacklist}
+            onChange={(e) => setBlacklist(e.target.checked)}
+            className="checkbox"
+          />
+          <label className="text-sm text-white">
+            Blacklist this problem (disable from public use)
+          </label>
+        </div>
+
+        {/* Submit */}
         <button
           onClick={handleCreate}
           className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"

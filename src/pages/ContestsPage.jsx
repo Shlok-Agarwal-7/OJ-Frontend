@@ -10,7 +10,7 @@ const ContestsPage = () => {
   const [upcomingContests, setUpcomingContests] = useState([]);
   const [previousContests, setPreviousContests] = useState([]);
   const [runningContests, setRunningContests] = useState([]);
-  const [activeList, setActiveList] = useState("Previous"); // 'running', 'upcoming', 'completed'
+  const [activeList, setActiveList] = useState("Running"); // 'running', 'upcoming', 'completed'
 
   const fetchUpcomingContests = async () => {
     const res = await apiClient.get("contests/upcoming");
@@ -62,6 +62,16 @@ const ContestsPage = () => {
         >
           Completed
         </button>
+        {localStorage.getItem("role") === "Mentor" && (
+          <div className="mb-4">
+            <Link
+              to="/contests/create"
+              className="inline-block bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded font-semibold transition"
+            >
+              + Add Contest
+            </Link>
+          </div>
+        )}
       </div>
       <h1 className="text-2xl font-bold mb-5">
         {`${activeList}`} Contest List
@@ -82,7 +92,6 @@ const ContestsPage = () => {
               >
                 {contest.title}
               </Link>
-              <p className="secondary-text mb-2">{contest.description}</p>
               <p className="text-sm text-gray-500">
                 <span>
                   {" "}

@@ -4,6 +4,7 @@ import CodeEditor from "../components/CodeEditor";
 import ProblemCard from "../components/ProblemCard";
 import apiClient from "../backend";
 import { toast } from "sonner";
+import ContestNavbar from "../components/ContestNavbar";
 
 export default function ProblemDetail() {
   const params = useParams();
@@ -29,12 +30,15 @@ export default function ProblemDetail() {
   }, []);
 
   return (
-    <div className="flex w-full justify-center mt-5">
-      <div className="w-1/2 h-full  px-2">
-        <ProblemCard detail={detail} id={params.pid} isContest={isContest} />
-      </div>
-      <div className="w-1/2 h-full px-2">
-        <CodeEditor id={params.pid} cid={params.cid} isContest = {isContest} />
+    <div>
+      {isContest && <ContestNavbar cid={params.cid}/>}
+      <div className="flex w-full justify-center mt-5 min-h-screen">
+        <div className="w-1/2 h-full  px-2">
+          <ProblemCard detail={detail} id={params.pid} isContest={isContest} />
+        </div>
+        <div className="w-1/2 h-full px-2">
+          <CodeEditor id={params.pid} cid={params.cid} isContest={isContest} />
+        </div>
       </div>
     </div>
   );
