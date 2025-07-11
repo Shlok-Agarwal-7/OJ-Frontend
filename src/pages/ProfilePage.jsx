@@ -2,48 +2,54 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // or useRouter() for Next.js
 import apiClient from "../backend";
 import CodeDialog from "../components/CodeDialog";
+import { toast } from "sonner";
 
 const ProfilePage = () => {
   const { username } = useParams();
   const [profile, setProfile] = useState(null);
   const [submissions, setSubmissions] = useState([]);
-  const [loading, setLoading] = useState(true);
   const role = localStorage.getItem("role");
-  useEffect(() => {
-    const fetchProfileAndSubmissions = async () => {
-      try {
-        const profileData = await apiClient.get(`${username}`);
-        const submissionsData = await apiClient.get(
-          `mysubmissions/${username}`
-        );
-        setProfile(profileData.data);
-        setSubmissions(submissionsData.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch profile or submissions", err);
-        setLoading(false);
-      }
-    };
 
-    fetchProfileAndSubmissions();
+  useEffect(() => {
+    const fetchData = async () => {
+      const profileDataPromise = apiClient.get(`${username}`);
+      const submissionsDataPromise = apiClient.get(`mysubmissions/${username}`);
+      toast.promise(profileDataPromise, {
+        loading: "loading Profile",
+        error: "user doesn't exist",
+        success: (res) => {
+          setProfile(res.data);
+          return "profile loaded"
+        },
+      });
+      toast.promise(submissionsDataPromise, {
+        loading: "loading submissions",
+        error: "error fetching submissions",
+        success: (res) => {
+          setSubmissions(res.data);
+          return "submissions loaded"
+        },
+      });
+      try {
+        await profileDataPromise;
+        await submissionsDataPromise;
+      } catch {}
+    };
+    fetchData();
   }, [username]);
 
-  if (loading) return <p className="text-center mt-4">Loading...</p>;
-  if (!profile) return <p className="text-center mt-4">User not found.</p>;
-
-  console.log(profile);
   return (
     <div className="p-6 max-w-4xl mx-auto text-white min-h-screen">
       {/* Profile Info */}
       <div className="card-color p-6 rounded-xl shadow mb-6">
         <h1 className="text-2xl font-bold mb-2">
-          {profile.username}'s Profile
+          {profile?.username}'s Profile
         </h1>
         <p>
-          Points: <strong>{profile.points}</strong>
+          Points: <strong>{profile?.points}</strong>
         </p>
         <p>
-          Rank: <strong>{profile.rank}</strong>
+          Rank: <strong>{profile?.rank}</strong>
         </p>
         <p>
           Role : <strong>{role}</strong>

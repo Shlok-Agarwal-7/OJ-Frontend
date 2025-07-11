@@ -25,16 +25,6 @@ const AIHintBox = ({ title, question }) => {
 
   return (
     <div className="mt-6 w-full px-4">
-      <button
-        onClick={fetchHint}
-        disabled={loading}
-        className={`bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow mb-5 ${
-          loading ? "cursor-not-allowed" : ""
-        }`}
-      >
-        {loading ? "Generating Hint..." : "Get AI Hint"}
-      </button>
-
       {hint && (
         <div className="card-color collapse border-base-300 border">
           <input type="checkbox" />
@@ -43,6 +33,15 @@ const AIHintBox = ({ title, question }) => {
           <div className="collapse-content text-sm">{hint}</div>
         </div>
       )}
+      <button
+        onClick={fetchHint}
+        disabled={loading}
+        className={`bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow mt-5 ${
+          loading ? "cursor-not-allowed" : ""
+        }`}
+      >
+        {loading ? "Generating Hint..." : "Get AI Hint"}
+      </button>
     </div>
   );
 };

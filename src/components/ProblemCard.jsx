@@ -6,7 +6,7 @@ const ProblemCard = ({ detail, id, isContest }) => {
   const [userSubmissions, setUserSubmissions] = useState([]);
   const [allSubmissions, setAllSubmissions] = useState([]);
   const [activeTab, setActiveTab] = useState("problem");
-  
+
   const handleUserSubmission = async () => {
     setActiveTab("my");
     apiClient
@@ -76,6 +76,20 @@ const ProblemCard = ({ detail, id, isContest }) => {
               </button>
             </li>
           )}
+          {!isContest && (
+            <li>
+              <button
+                className={`px-3 py-1 rounded-t ${
+                  activeTab === "ai"
+                    ? "bg-[#3a3b3c] text-white"
+                    : "text-gray-400"
+                }`}
+                onClick={() => setActiveTab("ai")}
+              >
+                AI Hint
+              </button>
+            </li>
+          )}
         </ul>
       </div>
 
@@ -87,7 +101,6 @@ const ProblemCard = ({ detail, id, isContest }) => {
             detail={detail}
             userSubmissions={userSubmissions}
             allSubmissions={allSubmissions}
-            isContest={isContest}
           />
         }
       </div>

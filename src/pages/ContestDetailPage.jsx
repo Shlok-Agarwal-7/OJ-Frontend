@@ -6,6 +6,7 @@ import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import ProblemRow from "../components/ProblemRow";
 import ContestTimer from "../components/ContestTimer";
+import {toast} from 'sonner'
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -14,16 +15,21 @@ const ContestDetailPage = () => {
   const { id } = useParams();
   const [contest, setContest] = useState(null);
   const [problems, setProblems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+
 
   const fetchContestDetails = async () => {
+    const contestPromise = apiClient.get(`/contests/${id}`);
+    toast.promise(contestPromise,{
+      loading : "loading your contest",
+      error : "error loading constest details",
+      success : (res) =>{
+        setContest(res.data)
+        return "Contest details loaded"
+      }
+    })
     try {
-      const res = await apiClient.get(`/contests/${id}`);
-      setContest(res.data);
+      await contestPromise
     } catch (err) {
-      console.error(err);
-      setError("Failed to load contest details.");
     }
   };
 
@@ -39,16 +45,12 @@ const ContestDetailPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       await fetchContestDetails();
       await fetchContestProblems();
-      setLoading(false);
     };
     fetchData();
   }, [id]);
 
-  if (loading) return <div className="p-4 text-gray-700">Loading...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
   if (!contest) return null;
 
   const now = dayjs();

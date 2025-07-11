@@ -7,12 +7,11 @@ const renderContent = ({
   detail,
   userSubmissions,
   allSubmissions,
-  isContest,
 }) => {
   switch (activeTab) {
     case "problem":
       return (
-        <>
+        <div className="max-h-[100vh] overflow-y-auto pr-2 text-white">
           <h2 className="text-xl font-semibold mb-4">{detail?.title}</h2>
           <div className="mb-2">
             <Markdown>{detail?.question}</Markdown>
@@ -27,10 +26,7 @@ const renderContent = ({
           <pre className="bg-[#3a3b3c] p-2 rounded">
             {detail?.sample_output}
           </pre>
-          {!isContest && (
-            <AIHintBox title={detail?.title} question={detail?.question} />
-          )}
-        </>
+        </div>
       );
 
     case "my":
@@ -56,6 +52,8 @@ const renderContent = ({
           )}
         </div>
       );
+    case "ai":
+      return <AIHintBox title={detail?.title} question={detail?.question} />;
 
     default:
       return null;
