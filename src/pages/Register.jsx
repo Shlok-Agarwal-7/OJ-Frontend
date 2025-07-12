@@ -4,7 +4,7 @@ import apiClient from "../backend";
 import { toast } from "sonner";
 export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -12,6 +12,7 @@ export default function Register() {
   };
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     apiClient
       .post("api/register", form)
@@ -30,6 +31,7 @@ export default function Register() {
           });
         }
       });
+    setLoading(false);
   };
 
   return (
@@ -72,7 +74,10 @@ export default function Register() {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-500 py-3 rounded font-semibold transition mb-2"
+          disabled={loading}
+          className={`w-full ${
+            loading ? "cursor-not-allowed" : ""
+          } bg-blue-600 hover:bg-blue-500 py-3 rounded font-semibold transition mb-2`}
         >
           Create Account
         </button>

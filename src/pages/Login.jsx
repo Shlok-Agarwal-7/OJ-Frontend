@@ -5,15 +5,15 @@ import { toast } from "sonner";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
-  const [error, setError] = useState();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     apiClient
       .post("api/login", form)
       .then((response) => {
@@ -25,9 +25,11 @@ export default function Login() {
       })
       .catch((error) => {
         if (error.status === 400) {
-          toast.error("Verify Username and Password");
+          console.log(error)
+          toast.error(error.response.data.detail);
         }
       });
+    setLoading(false);
   };
 
   return (
@@ -60,7 +62,10 @@ export default function Login() {
 
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-500 py-3 rounded font-semibold transition mb-2"
+          disabled={loading}
+          className={`w-full bg-green-600 hover:bg-green-500 py-3 rounded font-semibold transition mb-2 ${
+            loading ? "cursor-not-allowed" : ""
+          }`}
         >
           Sign In
         </button>

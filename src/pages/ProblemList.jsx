@@ -117,7 +117,7 @@ const ProblemList = () => {
         <Link to="/problem-create">
           <button
             className={`bg-blue-500 hover:bg-blue-400 rounded-md px-4 py-2 ${
-              role === "Student" ? "hidden disabled" : ""
+              role !== "Mentor" ? "hidden disabled" : ""
             }`}
           >
             Add New Problem
@@ -126,7 +126,7 @@ const ProblemList = () => {
 
         <button
           className={`bg-blue-500 hover:bg-blue-400 rounded-md px-4 py-2 ${
-            role === "Student" ? "hidden disabled" : ""
+            role !== "Mentor" ? "hidden disabled" : ""
           }`}
           onClick={() => {
             setProblems(blackListProblems);
@@ -136,7 +136,7 @@ const ProblemList = () => {
         </button>
         <button
           className={`bg-blue-500 hover:bg-blue-400 rounded-md px-4 py-2 ${
-            role === "Student" ? "hidden disabled" : ""
+            role !== "Mentor" ? "hidden disabled" : ""
           }`}
           onClick={() => {
             setProblems(whiteListProblems);

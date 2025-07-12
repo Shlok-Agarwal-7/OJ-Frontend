@@ -11,7 +11,7 @@ const ContestForm = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [problems, setProblems] = useState([{ problem_id: "", order: "" }]);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,16 +23,22 @@ const ContestForm = () => {
       end_time: endTime,
     };
 
-    const createContestPromise = apiClient.post("/contests/create", payload);
-    toast.promise(createContestPromise, {
-      loading: "Creating contest...",
-      success: "Contest created!",
-      error: "Failed to create contest.",
-    });
+    let contestId = null;
 
     try {
-      const res = await createContestPromise;
-      const contestId = res.data.id;
+      setLoading(true);
+
+      const createContestPromise = apiClient.post("/contests/create", payload);
+      const res = toast.promise(createContestPromise, {
+        loading: "Creating contest...",
+        success: "Contest created!",
+        error: (error) => {
+          console.error(error);
+          return error?.response?.data?.detail || "Failed to create contest";
+        },
+      });
+
+      contestId = res.data.id;
 
       const addProblemsPromise = (async () => {
         for (const prob of problems) {
@@ -48,14 +54,17 @@ const ContestForm = () => {
       toast.promise(addProblemsPromise, {
         loading: "Adding problems...",
         success: "All problems added!",
-        error: "Error adding some problems.",
+        error: (error) => {
+          console.error(error);
+          return error?.response?.data?.detail || "Failed to add problems";
+        },
       });
-
-      await addProblemsPromise;
 
       navigate(`/contests/${contestId}`);
     } catch (err) {
-      console.error(err);
+      console.error("Submission error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,7 +178,10 @@ const ContestForm = () => {
         {/* Submit */}
         <button
           onClick={handleSubmit}
-          className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold"
+          disabled={loading}
+          className={`bg-green-600 hover:bg-green-500 px-4 py-2 rounded font-semibold ${
+            loading ? "cursor-not-allowed" : ""
+          }`}
         >
           Create
         </button>
