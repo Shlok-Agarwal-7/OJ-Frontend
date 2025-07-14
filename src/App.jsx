@@ -33,7 +33,7 @@ function App() {
     <>
       {!shouldHideNavbar && <Navbar />}
       <Routes>
-        {/* <Route element={<Landing />} path="/" /> */}
+        <Route element={<Landing />} path="/" />
         <Route
           element={<Register setUsername={setUsername} setRole={setRole} />}
           path="/register"
