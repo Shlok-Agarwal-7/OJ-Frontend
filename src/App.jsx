@@ -33,7 +33,7 @@ function App() {
     <>
       {!shouldHideNavbar && <Navbar />}
       <Routes>
-        <Route element={<Landing />} path="/" />
+        {/* <Route element={<Landing />} path="/" /> */}
         <Route
           element={<Register setUsername={setUsername} setRole={setRole} />}
           path="/register"
@@ -49,7 +49,7 @@ function App() {
         <Route element={<ProblemList />} path="/problems" />
         <Route element={<ProblemDetail />} path="/problem/:pid" />
         <Route element={<ProblemUpdate />} path="/problem-update/:id" />
-        <Route element={<CreateProblemPage />} path="/problem-create" />
+        <Route element={<CreateProblemPage />} path="/" />
         <Route element={<ProfilePage />} path="/profile/:username" />
         <Route element={<ContestsPage />} path="/contests" />
         <Route element={<ContestDetailPage />} path="/contests/:id" />

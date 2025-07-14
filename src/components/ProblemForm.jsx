@@ -27,17 +27,73 @@ const ProblemForm = () => {
       });
   }, []);
 
-  const handleJsonUpload = (e) => {
+  // const handleJsonUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   const reader = new FileReader();
+  //   reader.onload = (event) => {
+  //     try {
+  //       const json = JSON.parse(event.target.result);
+  //       setTestcases([json]);
+  //     } catch (err) {
+  //       alert("Invalid JSON file!");
+  //       console.error(err);
+  //     }
+  //   };
+
+  //   reader.readAsText(file);
+  // };
+
+  const handleTxtUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const json = JSON.parse(event.target.result);
-        setTestcases([json]);
+        const lines = event.target.result.split("\n");
+        const testcasesParsed = [];
+        let i = 0;
+
+        while (i < lines.length) {
+          if (lines[i]?.trim() === "INPUT") {
+            i++;
+            let inputLines = [];
+
+            while (i < lines.length && lines[i].trim() !== "OUTPUT") {
+              inputLines.push(lines[i]);
+              i++;
+            }
+
+            if (lines[i]?.trim() !== "OUTPUT") {
+              throw new Error("Expected OUTPUT after INPUT block");
+            }
+
+            i++;
+            let outputLines = [];
+
+            while (i < lines.length && lines[i]?.trim() !== "INPUT") {
+              outputLines.push(lines[i]);
+              i++;
+            }
+
+            testcasesParsed.push({
+              input: inputLines.join("\n").trim(),
+              output: outputLines.join("\n").trim(),
+            });
+          } else {
+            i++;
+          }
+        }
+
+        if (testcasesParsed.length === 0) {
+          throw new Error("No valid testcases found");
+        }
+
+        setTestcases([testcasesParsed]);
       } catch (err) {
-        alert("Invalid JSON file!");
+        alert("Invalid testcases format in .txt file!");
         console.error(err);
       }
     };
@@ -177,14 +233,14 @@ const ProblemForm = () => {
           </label>
           <input
             type="file"
-            accept=".json"
-            onChange={handleJsonUpload}
+            accept=".txt"
+            onChange={handleTxtUpload}
             className="file-input file-input-sm file-input-bordered w-full bg-[#3a3b3c] text-white"
             required
           />
           {testcases.length > 0 && (
             <p className="mt-2 text-green-400 text-sm">
-              ✔ {testcases.length} testcases loaded.
+              ✔ All testcases loaded.
             </p>
           )}
         </div>
