@@ -13,7 +13,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ContestsPage from "./pages/ContestsPage";
 import ContestDetailPage from "./pages/ContestDetailPage";
 import ContestCreateForm from "./pages/ContestCreatePage";
-import ContestAddProblems from "./components/contestAddProblems";
+import ContestAddProblems from "./components/ContestAddProblems";
 function App() {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
