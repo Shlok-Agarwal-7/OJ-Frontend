@@ -17,7 +17,7 @@ export default function Login() {
     apiClient
       .post("api/login", form)
       .then((response) => {
-        localStorage.setItem("access_token", response.data.access);
+        sessionStorage.setItem("access_token", response.data.access);
         localStorage.setItem("username", response.data.username);
         localStorage.setItem("role", response.data.role);
         navigate("/problems");
