@@ -7,6 +7,7 @@ const ContestAddProblems = () => {
   const [problems, setProblems] = useState([{ problem_id: "", order: "" }]);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
