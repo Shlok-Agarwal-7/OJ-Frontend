@@ -29,36 +29,34 @@ const ContestForm = () => {
       setLoading(true);
 
       const createContestPromise = apiClient.post("/contests/create", payload);
-      const res = toast.promise(createContestPromise, {
+      toast.promise(createContestPromise, {
         loading: "Creating contest...",
         success: "Contest created!",
-        error: (error) => {
-          console.error(error);
-          return error?.response?.data?.detail || "Failed to create contest";
-        },
+        error: (error) =>
+          error?.response?.data?.detail[0] || "Failed to create contest",
       });
 
-      contestId = res.data.id;
+      const res = await createContestPromise;
+      contestId = res?.data?.id;
 
-      const addProblemsPromise = (async () => {
-        for (const prob of problems) {
-          if (!prob.problem_id || !prob.order) continue;
-
-          await apiClient.post(`/contests/${contestId}/addproblem`, {
+      const addProblemsPromise = Promise.all(
+        problems.map((prob) => {
+          if (!prob.problem_id || !prob.order) return Promise.resolve();
+          return apiClient.post(`/contests/${contestId}/addproblem`, {
             problem_id: parseInt(prob.problem_id),
             order: parseInt(prob.order),
           });
-        }
-      })();
+        })
+      );
 
       toast.promise(addProblemsPromise, {
         loading: "Adding problems...",
         success: "All problems added!",
-        error: (error) => {
-          console.error(error);
-          return error?.response?.data?.detail || "Failed to add problems";
-        },
+        error: (error) =>
+          error?.response?.data?.detail || "Failed to add problems",
       });
+
+      await addProblemsPromise;
 
       navigate(`/contests/${contestId}`);
     } catch (err) {

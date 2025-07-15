@@ -13,6 +13,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ContestsPage from "./pages/ContestsPage";
 import ContestDetailPage from "./pages/ContestDetailPage";
 import ContestCreateForm from "./pages/ContestCreatePage";
+import ContestAddProblems from "./components/contestAddProblems";
 function App() {
   const [username, setUsername] = useState("");
   const [role, setRole] = useState("");
@@ -55,6 +56,7 @@ function App() {
         <Route element={<ContestDetailPage />} path="/contests/:id" />
         <Route element={<ProblemDetail />} path="/contests/:cid/problem/:pid" />
         <Route element={<ContestCreateForm />} path="/Contests/create" />
+        <Route element={<ContestAddProblems/>} path="/addProblems/:id" />
       </Routes>
     </>
   );

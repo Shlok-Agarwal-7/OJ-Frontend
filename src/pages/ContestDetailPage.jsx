@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import apiClient from "../backend";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 import ProblemRow from "../components/ProblemRow";
 import ContestTimer from "../components/ContestTimer";
-import {toast} from 'sonner'
+import { toast } from "sonner";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -15,22 +15,21 @@ const ContestDetailPage = () => {
   const { id } = useParams();
   const [contest, setContest] = useState(null);
   const [problems, setProblems] = useState([]);
-
+  const role = localStorage.getItem("role");
 
   const fetchContestDetails = async () => {
     const contestPromise = apiClient.get(`/contests/${id}`);
-    toast.promise(contestPromise,{
-      loading : "loading your contest",
-      error : "error loading constest details",
-      success : (res) =>{
-        setContest(res.data)
-        return "Contest details loaded"
-      }
-    })
+    toast.promise(contestPromise, {
+      loading: "loading your contest",
+      error: "error loading constest details",
+      success: (res) => {
+        setContest(res.data);
+        return "Contest details loaded";
+      },
+    });
     try {
-      await contestPromise
-    } catch (err) {
-    }
+      await contestPromise;
+    } catch (err) {}
   };
 
   const fetchContestProblems = async () => {
@@ -61,11 +60,18 @@ const ContestDetailPage = () => {
   const isEnded = now.isAfter(end);
   const isUpcoming = now.isBefore(start);
 
-
   return (
     <div className="min-h-screen max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-2">{contest.title}</h1>
-      <p className="secondary-text mb-4">{contest.description}</p>
+      <div className="flex justify-between">
+        <p className="secondary-text mb-4">{contest.description}</p>
+        <Link
+          to={`/addProblems/${id}`}
+          className="mb-4 p-2 bg-blue-500 rounded-md"
+        >
+          Add Problems
+        </Link>
+      </div>
 
       <div className="primary-text grid grid-cols-2 gap-4 text-sm mb-6">
         <div>
@@ -82,7 +88,7 @@ const ContestDetailPage = () => {
         </div>
         {isRunning && (
           <div className="col-span-2 text-orange-500">
-            <ContestTimer start={start} end={end}/>
+            <ContestTimer start={start} end={end} />
           </div>
         )}
       </div>
