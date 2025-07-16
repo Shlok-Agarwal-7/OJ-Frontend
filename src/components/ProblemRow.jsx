@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { RxUpdate } from "react-icons/rx";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import apiClient from "../backend";
+import { useUserContext } from "../context/UserContext";
 
 const ProblemRow = ({
   cid = null,
@@ -17,6 +18,9 @@ const ProblemRow = ({
     Medium: "bg-yellow-500 text-black",
     Hard: "bg-red-600 text-white",
   };
+  const { user } = useUserContext();
+
+  const role = user?.role;
 
   const handleDelete = async () => {
     try {
@@ -27,8 +31,6 @@ const ProblemRow = ({
       console.log(error);
     }
   };
-
-  const role = localStorage.getItem("role");
 
   return (
     <div className="flex items-center justify-between px-4 py-2 card-color rounded-md text-sm mb-2">

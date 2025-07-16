@@ -1,39 +1,42 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {jwtDecode} from "jwt-decode";
+import apiClient from "../backend";
 
 const UserContext = createContext();
 
+export const useUserContext = () => useContext(UserContext);
+
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(() => sessionStorage.getItem("access_token"));
 
-  useEffect(() => {
-    if (accessToken) {
-      const decoded = jwtDecode(accessToken);
-      setUser({ username: decoded.username, role: decoded.role });
-    } else {
+  const fetchUser = async () => {
+    try {
+      const res = await apiClient.get("/user/");
+      setUser(res.data);
+    } catch (err) {
+      console.error("Failed to fetch user", err);
       setUser(null);
     }
-  }, [accessToken]);
+  };
 
-  const setToken = (token) => {
-    setAccessToken(token);
-    sessionStorage.setItem("access_token", token);
-    const decoded = jwt_decode(token);
-    setUser({ username: decoded.username, role: decoded.role });
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const setToken = (data) => {
+    sessionStorage.setItem("access_token", data?.access);
+    setUser({ username: data.username, role: data.role });
   };
 
   const clearToken = () => {
-    setAccessToken(null);
     sessionStorage.removeItem("access_token");
     setUser(null);
   };
 
-  return (
-    <UserContext.Provider value={{ user, accessToken, setToken, clearToken }}>
-      {children}
-    </UserContext.Provider>
-  );
+  const value = {
+    setToken,
+    clearToken,
+    user,
+    setUser,
+  };
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
-
-export const useUser = () => useContext(UserContext);

@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import RangeSelector from "../components/RangeSelector";
+import { useUserContext } from "../context/UserContext";
 
 export default function Leaderboard() {
   const [users, setUsers] = useState([]);
   const [range, setRange] = useState(10);
   const [localRank, setLocalRank] = useState(false);
+  const {user} = useUserContext()
 
   const navigate = useNavigate();
   
@@ -64,27 +66,27 @@ export default function Leaderboard() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, idx) => (
+              {users.map((ranks, idx) => (
                 <tr
                   key={idx}
                   className={`hover:bg-[#3a3b3c] transition border-b border-gray-800/50 ${
-                    localStorage.getItem("username") == user.username
+                    user?.username === ranks.username
                       ? "bg-[#ecfdf3] text-[#189642]"
                       : ""
                   }`}
                 >
                   <td
                     className={`py-3 px-4 font-semibold text-lg ${
-                      localStorage.getItem("username") == user.username
+                      user?.username === ranks.username
                         ? "text-[#189642]"
                         : "text-yellow-300"
                     }`}
                   >
-                    #{user.rank}
+                    #{ranks.rank}
                   </td>
-                  <td className="py-3 px-4">{user.username}</td>
+                  <td className="py-3 px-4">{ranks.username}</td>
                   <td className="py-3 px-4 text-[#189642] font-medium">
-                    {user.points}
+                    {ranks.points}
                   </td>
                 </tr>
               ))}

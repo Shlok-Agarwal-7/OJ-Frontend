@@ -4,8 +4,11 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import apiClient from "../backend";
 import Filter from "../components/Filter";
+import { useUserContext } from "../context/UserContext";
 
 const ProblemList = () => {
+  const { user } = useUserContext();
+
   useEffect(() => {
     const fetchWhiteListProblems = async () => {
       try {
@@ -31,7 +34,7 @@ const ProblemList = () => {
   }, []);
 
   // states
-  const role = localStorage.getItem("role");
+  const role = user?.role;
   const [whiteListProblems, setWhiteListProblems] = useState([]);
   const [blackListProblems, setBlackListProblems] = useState([]);
   const [problems, setProblems] = useState([]);

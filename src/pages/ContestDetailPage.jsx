@@ -7,6 +7,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import ProblemRow from "../components/ProblemRow";
 import ContestTimer from "../components/ContestTimer";
 import { toast } from "sonner";
+import { useUserContext } from "../context/UserContext";
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -15,7 +16,7 @@ const ContestDetailPage = () => {
   const { id } = useParams();
   const [contest, setContest] = useState(null);
   const [problems, setProblems] = useState([]);
-  const role = localStorage.getItem("role");
+  const {user} = useUserContext() 
 
   const fetchContestDetails = async () => {
     const contestPromise = apiClient.get(`/contests/${id}`);
@@ -65,12 +66,12 @@ const ContestDetailPage = () => {
       <h1 className="text-3xl font-bold mb-2">{contest.title}</h1>
       <div className="flex justify-between">
         <p className="secondary-text mb-4">{contest.description}</p>
-        <Link
+        {(user?.role === "Mentor") && (<Link
           to={`/addProblems/${id}`}
           className="mb-4 p-2 bg-blue-500 rounded-md"
         >
           Add Problems
-        </Link>
+        </Link>)}
       </div>
 
       <div className="primary-text grid grid-cols-2 gap-4 text-sm mb-6">

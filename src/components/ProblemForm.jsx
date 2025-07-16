@@ -25,25 +25,8 @@ const ProblemForm = () => {
       .catch((err) => {
         console.error("Failed to load tags", err);
       });
+
   }, []);
-
-  // const handleJsonUpload = (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-
-  //   const reader = new FileReader();
-  //   reader.onload = (event) => {
-  //     try {
-  //       const json = JSON.parse(event.target.result);
-  //       setTestcases([json]);
-  //     } catch (err) {
-  //       alert("Invalid JSON file!");
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   reader.readAsText(file);
-  // };
 
   const handleTxtUpload = (e) => {
     const file = e.target.files[0];

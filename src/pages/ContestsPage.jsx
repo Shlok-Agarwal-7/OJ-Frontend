@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat"; // for 'Do'
 import { Link } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 
 dayjs.extend(advancedFormat);
 
@@ -11,6 +12,7 @@ const ContestsPage = () => {
   const [previousContests, setPreviousContests] = useState([]);
   const [runningContests, setRunningContests] = useState([]);
   const [activeList, setActiveList] = useState("Running"); // 'running', 'upcoming', 'completed'
+  const {user} = useUserContext()
 
   const fetchUpcomingContests = async () => {
     const res = await apiClient.get("contests/upcoming");
@@ -62,7 +64,7 @@ const ContestsPage = () => {
         >
           Completed
         </button>
-        {localStorage.getItem("role") === "Mentor" && (
+        {user?.role === "Mentor" && (
           <div className="mb-4">
             <Link
               to="/contests/create"
