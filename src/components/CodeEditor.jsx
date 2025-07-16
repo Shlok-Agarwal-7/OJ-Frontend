@@ -156,6 +156,7 @@ public class Main {
     setLoading(true);
     let submitCodePromise;
     if (isContest) {
+      console.log("contest");
       submitCodePromise = apiClient.post(`/contests/${cid}/submit`, {
         language: language,
         code: code,
@@ -181,6 +182,13 @@ public class Main {
         await submitCodePromise;
       } catch (error) {}
     } else {
+      console.log("not contest");
+      console.log({
+        language: language,
+        code: code,
+        problem_id: id,
+      }
+      )
       submitCodePromise = apiClient.post("/submit", {
         language: language,
         code: code,

@@ -21,8 +21,11 @@ export default function ProblemDetail() {
         const response = await apiClient.get(`problems/${params.pid}`);
         setDetail(response.data);
       } catch (e) {
-        navigate("/register");
-        toast.info("Need to logged in to access page");
+        console.log(e);
+        if (e.response.status === 400) {
+          navigate("/register");
+          toast.info("Need to logged in to access page");
+        }
       }
     };
 

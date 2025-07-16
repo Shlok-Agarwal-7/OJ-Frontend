@@ -2,20 +2,21 @@ import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useUserContext } from "../context/UserContext";
 
 export default function Navbar() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const username = localStorage.getItem("username");
+  const { clearToken,user } = useUserContext();
+  const username = user?.username 
 
   const handleLogout = () => {
-    const refresh = localStorage.getItem("refresh");
     apiClient
-      .post("/api/logout", { refresh: refresh })
+      .post("/api/logout")
       .then((response) => {
         navigate("/");
         toast.success("Successfuly logged out");
-        localStorage.clear();
+        clearToken();
       })
       .catch((error) => {
         setError(error);
@@ -47,7 +48,7 @@ export default function Navbar() {
           Leaderboard
         </Link>
 
-        {localStorage.getItem("access_token") == null ? (
+        {sessionStorage.getItem("access_token") === null ? (
           <Link
             to="/login"
             className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded text-sm text-white"

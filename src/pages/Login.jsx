@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
 import { toast } from "sonner";
+import { useUserContext } from "../context/UserContext";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { setToken } = useUserContext();
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -17,15 +19,13 @@ export default function Login() {
     apiClient
       .post("api/login", form)
       .then((response) => {
-        localStorage.setItem("access_token", response.data.access);
-        localStorage.setItem("username", response.data.username);
-        localStorage.setItem("role", response.data.role);
+        setToken(response.data);
         navigate("/problems");
         toast.success(`Welcome ${response.data.username}`);
       })
       .catch((error) => {
         if (error.status === 400) {
-          console.log(error)
+          console.log(error);
           toast.error(error.response.data.detail);
         }
       });
