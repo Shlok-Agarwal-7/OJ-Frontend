@@ -23,7 +23,6 @@ const ProblemForm = () => {
         setAvailableTags(res.data.map((tag) => tag.name));
       })
       .catch((err) => {
-        console.error("Failed to load tags", err);
       });
 
   }, []);
@@ -77,7 +76,6 @@ const ProblemForm = () => {
         setTestcases([testcasesParsed]);
       } catch (err) {
         alert("Invalid testcases format in .txt file!");
-        console.error(err);
       }
     };
 

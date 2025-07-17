@@ -35,7 +35,6 @@ const ContestAddProblems = () => {
 
       navigate(`/contests/${id}`);
     } catch (err) {
-      console.error("Submission error:", err);
     } finally {
       setLoading(false);
     }

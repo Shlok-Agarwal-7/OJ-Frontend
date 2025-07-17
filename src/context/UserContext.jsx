@@ -13,7 +13,6 @@ export const UserProvider = ({ children }) => {
       const res = await apiClient.get("/user/");
       setUser(res.data);
     } catch (err) {
-      console.error("Failed to fetch user", err);
       setUser(null);
     }
   };

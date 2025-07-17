@@ -17,7 +17,6 @@ const ProblemList = () => {
         setProblems(response.data);
       } catch (e) {
         setError(e);
-        console.log(error);
       }
     };
     const fetchBlackListProblems = async () => {
@@ -26,7 +25,6 @@ const ProblemList = () => {
         setBlackListProblems(response.data);
       } catch (e) {
         setError(e);
-        console.log(e);
       }
     };
     fetchWhiteListProblems();

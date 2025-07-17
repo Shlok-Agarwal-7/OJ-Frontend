@@ -8,7 +8,7 @@ export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {setToken} = useUserContext()
+  const { setToken } = useUserContext();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,10 +17,29 @@ export default function Register() {
   const handleSubmit = (e) => {
     setLoading(true);
     e.preventDefault();
+    if (form.username.length < 8) {
+      toast.error("Username must be at least 8 characters long");
+      setLoading(false);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      toast.error("Please enter a valid email address");
+      setLoading(false);
+      return;
+    }
+
+    if (form.password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      setLoading(false);
+      return;
+    }
+
     apiClient
       .post("api/register", form)
       .then((response) => {
-        setToken(response.data)
+        setToken(response.data);
         navigate("/problems");
         toast.success(`Welcome ${response.data.username}`);
       })
@@ -31,8 +50,10 @@ export default function Register() {
             toast.error(item);
           });
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    setLoading(false);
   };
 
   return (
@@ -55,7 +76,7 @@ export default function Register() {
 
         <label className="block mb-2 text-sm">Email</label>
         <input
-          type="email"
+          type="text"
           name="email"
           value={form.email}
           onChange={handleChange}

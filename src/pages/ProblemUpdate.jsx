@@ -35,7 +35,6 @@ const UpdateProblemPage = () => {
           memory_limit: response.data.memory_limit || 256,
           time_limit: response.data.time_limit || 1,
         });
-        console.log("response.data.blacklist =>", response.data.blacklist);
       })
       .catch((error) => {
         setError(error);
@@ -47,7 +46,6 @@ const UpdateProblemPage = () => {
         setAvailableTags(res.data.map((tag) => tag.name));
       })
       .catch((err) => {
-        console.error("Failed to load tags", err);
       });
   }, []);
 
@@ -65,7 +63,6 @@ const UpdateProblemPage = () => {
         setTestcases([json]);
       } catch (err) {
         alert("Invalid JSON file!");
-        console.error(err);
       }
     };
     reader.readAsText(file);
@@ -85,9 +82,6 @@ const UpdateProblemPage = () => {
       memory_limit: existingProblem.memory_limit,
       time_limit: existingProblem.time_limit,
     };
-
-    console.log(payload);
-
     if (testcases.length > 0) {
       payload.testcases = testcases[0];
     }

@@ -38,7 +38,6 @@ const ContestDetailPage = () => {
       const res = await apiClient.get(`/contests/${id}/problems`);
       setProblems(res.data);
     } catch (err) {
-      console.error(err);
       setError("Failed to load contest problems.");
     }
   };

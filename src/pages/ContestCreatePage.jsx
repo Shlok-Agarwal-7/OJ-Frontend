@@ -60,7 +60,6 @@ const ContestForm = () => {
 
       navigate(`/contests/${contestId}`);
     } catch (err) {
-      console.error("Submission error:", err);
     } finally {
       setLoading(false);
     }

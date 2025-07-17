@@ -25,10 +25,8 @@ const ProblemRow = ({
   const handleDelete = async () => {
     try {
       const response = await apiClient.delete(`/problems/${pid}/delete`);
-      console.log(response);
       window.location.reload();
     } catch (error) {
-      console.log(error);
     }
   };
 

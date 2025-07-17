@@ -25,7 +25,6 @@ export default function Login() {
       })
       .catch((error) => {
         if (error.status === 400) {
-          console.log(error);
           toast.error(error.response.data.detail);
         }
       });

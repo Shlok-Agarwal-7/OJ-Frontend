@@ -15,7 +15,6 @@ const ProblemCard = ({ detail, id, isContest }) => {
         setUserSubmissions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 
@@ -27,7 +26,6 @@ const ProblemCard = ({ detail, id, isContest }) => {
         setAllSubmissions(response.data);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 

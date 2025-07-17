@@ -17,7 +17,6 @@ const AIHintBox = ({ title, question }) => {
       setHint(response.data.hint);
     } catch (error) {
       setHint("Failed to load hint. Try again later.");
-      console.error(error);
     } finally {
       setLoading(false);
     }

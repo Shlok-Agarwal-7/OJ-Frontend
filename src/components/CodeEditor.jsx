@@ -156,7 +156,6 @@ public class Main {
     setLoading(true);
     let submitCodePromise;
     if (isContest) {
-      console.log("contest");
       submitCodePromise = apiClient.post(`/contests/${cid}/submit`, {
         language: language,
         code: code,
@@ -166,7 +165,12 @@ public class Main {
         loading: "Trying all Testcases",
         success: (res) => {
           setVerdict(res.data.verdict);
-          return `Code Submitted : ${verdict}`;
+          if(result !== "Accepted"){
+            toast.error(res.data.verdict)
+          }
+          else{
+            return `Code Submitted : ${verdict}`;
+          }
         },
         error: (error) => {
           return error.status !== 403
@@ -177,18 +181,8 @@ public class Main {
       try {
         await submitCodePromise;
       } catch (error) {}
-
-      try {
-        await submitCodePromise;
-      } catch (error) {}
     } else {
-      console.log("not contest");
-      console.log({
-        language: language,
-        code: code,
-        problem_id: id,
-      }
-      )
+      
       submitCodePromise = apiClient.post("/submit", {
         language: language,
         code: code,
@@ -198,6 +192,9 @@ public class Main {
         loading: "Trying all Testcases",
         success: (res) => {
           setVerdict(res.data.verdict);
+          if(res.data.verdict !== "Accepted"){
+            toast.error(res.data.verdict)
+          }
           return `Code Submitted : ${verdict}`;
         },
         error: "There was a error running your code",
