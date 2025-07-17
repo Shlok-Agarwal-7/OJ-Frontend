@@ -165,10 +165,9 @@ public class Main {
         loading: "Trying all Testcases",
         success: (res) => {
           setVerdict(res.data.verdict);
-          if(result !== "Accepted"){
-            toast.error(res.data.verdict)
-          }
-          else{
+          if (res.data.verdict !== "Accepted") {
+            toast.error(res.data.verdict);
+          } else {
             return `Code Submitted : ${verdict}`;
           }
         },
@@ -182,7 +181,6 @@ public class Main {
         await submitCodePromise;
       } catch (error) {}
     } else {
-      
       submitCodePromise = apiClient.post("/submit", {
         language: language,
         code: code,
@@ -192,10 +190,10 @@ public class Main {
         loading: "Trying all Testcases",
         success: (res) => {
           setVerdict(res.data.verdict);
-          if(res.data.verdict !== "Accepted"){
-            toast.error(res.data.verdict)
+          if (res.data.verdict !== "Accepted") {
+            toast.error(res.data.verdict);
           }
-          return `Code Submitted : ${verdict}`;
+          return `Code Submitted : ${res.data.verdict}`;
         },
         error: "There was a error running your code",
       });
