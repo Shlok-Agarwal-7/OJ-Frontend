@@ -210,7 +210,7 @@ const ProblemForm = () => {
         {/* Upload Testcases */}
         <div className="mb-4">
           <label className="block mb-1 text-sm font-medium text-white">
-            Upload Testcases (JSON)
+            Upload Testcases (TXT)
           </label>
           <input
             type="file"
