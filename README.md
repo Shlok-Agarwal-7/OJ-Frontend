@@ -3,6 +3,12 @@
 
 This repo houses the frontend code for the repo [Online-Judge](https://github.com/Shlok-Agarwal-7/Online-Judge), it is a `Vite + React` Frontend styled with `TailwindCSS` and `Daisy UI`
 
+The backend is hosted on an EC2 instance on AWS and the frontend is hosted on Vercel the live project is live at [link](https://oj-frontend-tawny.vercel.app/)
+
+## Demo
+
+Link to the demo video of the project [Demo](https://www.loom.com/share/d3c534d2aad2441fa076b5dcb583e33a?sid=14ebe362-b710-4f96-8117-905dc8df8962)
+
 
 
 ## Features
