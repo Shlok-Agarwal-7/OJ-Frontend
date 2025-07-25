@@ -28,7 +28,9 @@ const ProblemList = () => {
       }
     };
     fetchWhiteListProblems();
-    fetchBlackListProblems();
+    if (user?.role === "Mentor"){
+      fetchBlackListProblems();
+    }
   }, []);
 
   // states

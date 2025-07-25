@@ -1,6 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
+import { useEffect } from "react";
 
 export default function LandingPage() {
+  const { user } = useUserContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/problems");
+    }
+  }, [user, navigate]);
+
   return (
     <div className="min-h-screen text-white flex flex-col">
       {/* Hero Section */}
@@ -15,15 +26,12 @@ export default function LandingPage() {
         </p>
         <div className="space-x-4">
           <Link
-            to={`${
-              sessionStorage.getItem("access_token") !== null
-                ? "/problems"
-                : "/login"
-            }`}
+            to={user ? "/problems" : "/login"}
             className="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg font-semibold transition"
           >
             Get Started
           </Link>
+
           <Link
             to="/problems"
             className="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold transition"

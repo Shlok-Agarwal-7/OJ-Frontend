@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
 import { toast } from "sonner";
@@ -55,6 +55,12 @@ export default function Register() {
         setLoading(false);
       });
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/problems");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen text-white px-4">

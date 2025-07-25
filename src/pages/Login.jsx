@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../backend";
 import { toast } from "sonner";
@@ -8,10 +8,17 @@ export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { setToken } = useUserContext();
+  const { setToken,user } = useUserContext();
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+
+  useEffect(() => {
+    if (user) {
+      navigate("/problems");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -7,6 +7,7 @@ export const useUserContext = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [session,setSession] = useState(null);
 
   const fetchUser = async () => {
     try {
@@ -19,10 +20,11 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [session]);
 
   const setToken = (data) => {
     sessionStorage.setItem("access_token", data?.access);
+    setSession(data?.access)
     setUser({ username: data.username, role: data.role });
   };
 
@@ -39,3 +41,5 @@ export const UserProvider = ({ children }) => {
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
+
+
