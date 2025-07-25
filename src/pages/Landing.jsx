@@ -15,7 +15,11 @@ export default function LandingPage() {
         </p>
         <div className="space-x-4">
           <Link
-            to="/login"
+            to={`${
+              sessionStorage.getItem("access_token") !== null
+                ? "/problems"
+                : "/login"
+            }`}
             className="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg font-semibold transition"
           >
             Get Started

@@ -25,7 +25,6 @@ int main() {
   const monacoLanguageMap = {
     cpp: "cpp",
     py: "python",
-    java: "java",
   };
   const boilerplates = {
     cpp: `#include <iostream>
@@ -42,14 +41,6 @@ int main() {
 
 if __name__ == "__main__":
     main()
-`,
-    java: `import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        // your code goes here
-    }
-}
 `,
   };
 
@@ -224,7 +215,6 @@ public class Main {
         >
           <option value="cpp">C++</option>
           <option value="py">Python</option>
-          <option value="java">Java</option>
         </select>
       </div>
       {/* Code Textarea */}
