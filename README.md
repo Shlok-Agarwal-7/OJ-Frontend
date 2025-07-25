@@ -13,7 +13,7 @@ Link to the demo video of the project [Demo](https://www.loom.com/share/d3c534d2
 
 ## Features
 
-- Syntax Higlighted Code Editor for `C++` `Java` `Python`
+- Syntax Higlighted Code Editor for `C++` `Python`
 - Problem Tag Filtering and search functionalities 
 - Praticipation in Live Contests and Live Leaderboards to gain   points 
 - AI Hint Help for solving problems  
