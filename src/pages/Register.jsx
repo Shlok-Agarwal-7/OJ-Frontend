@@ -8,7 +8,7 @@ export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setToken } = useUserContext();
+  const { setToken,user } = useUserContext();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
