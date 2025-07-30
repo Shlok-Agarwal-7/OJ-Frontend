@@ -7,6 +7,12 @@ const renderContent = ({
   detail,
   userSubmissions,
   allSubmissions,
+  handleUserSubmissions,
+  handleAllSubmissions,
+  nextUserUrl,
+  prevUserUrl,
+  nextAllUrl,
+  prevAllUrl
 }) => {
   switch (activeTab) {
     case "problem":
@@ -31,25 +37,35 @@ const renderContent = ({
 
     case "my":
       return (
-        <div className="text-gray-300">
-          <h2 className="text-xl font-semibold mb-4">📄 My Submissions</h2>
-          {userSubmissions.length === 0 ? (
-            <p>No submissions yet.</p>
-          ) : (
-            <SubmissionsList submissions={userSubmissions} />
-          )}
+        <div>
+          <div className="text-gray-300">
+            <h2 className="text-xl font-semibold mb-4">📄 My Submissions</h2>
+            {userSubmissions.length === 0 ? (
+              <p>No submissions yet.</p>
+            ) : (
+              <SubmissionsList submissions={userSubmissions} />
+            )}
+          </div>
+          <div className="join">
+            <button className="join-item btn" onClick={handleUserSubmissions(prevUserUrl)}>«</button>
+            <button className="join-item btn" onClick={handleUserSubmissions(nextUserUrl)}>»</button>
+          </div>
         </div>
       );
 
     case "all":
       return (
-        <div className="text-gray-300">
-          <h2 className="text-xl font-semibold mb-4">📄 My Submissions</h2>
-          {allSubmissions.length === 0 ? (
-            <p>No submissions yet.</p>
-          ) : (
-            <SubmissionsList submissions={allSubmissions} />
-          )}
+        <div>
+          <div className="text-gray-300">
+            <h2 className="text-xl font-semibold mb-4">📄 My Submissions</h2>
+            {allSubmissions.length === 0 ? (
+              <p>No submissions yet.</p>
+            ) : (
+              <SubmissionsList submissions={allSubmissions} />
+            )}
+          </div>
+          <button className="join-item btn" onClick = {handleAllSubmissions(prevAllUrl)}>«</button>
+          <button className="join-item btn" onClick={handleAllSubmissions(nextAllUrl)}>»</button>
         </div>
       );
     case "ai":

@@ -1,29 +1,40 @@
 import { useState } from "react";
 import ProblemCardTabs from "./ProblemCardTabs";
 import apiClient from "../backend";
+import { toRelativeUrl } from "../backend";
 
 const ProblemCard = ({ detail, id, isContest }) => {
   const [userSubmissions, setUserSubmissions] = useState([]);
   const [allSubmissions, setAllSubmissions] = useState([]);
+  const [nextUserUrl,setNextUserUrl] = useState();
+  const [prevUserUrl,setPrevUserUrl] = useState();
+  const [nextAllUrl,setNextAllUrl] = useState();
+  const [prevAllUrl,setPrevAllUrl] = useState();
   const [activeTab, setActiveTab] = useState("problem");
 
-  const handleUserSubmission = async () => {
+  const handleUserSubmissions = async (url = `/getusersubmissions/?problem=${id}`) => {
     setActiveTab("my");
+    const relativeUrl = toRelativeUrl(url)
     apiClient
-      .get(`/getusersubmissions/?problem=${id}`)
+      .get(relativeUrl)
       .then((response) => {
-        setUserSubmissions(response.data);
+        setUserSubmissions(response.data.results);
+        setNextUserUrl(response.data.next)
+        setPrevUserUrl(response.data.previous)
       })
       .catch((error) => {
       });
   };
 
-  const handleAllSubmissions = async () => {
+  const handleAllSubmissions = async (url = `/getallsubmissions/?problem=${id}`) => {
     setActiveTab("all");
+    const relativeUrl = toRelativeUrl(url)
     apiClient
-      .get(`/getallsubmissions/?problem=${id}`)
+      .get(relativeUrl)
       .then((response) => {
-        setAllSubmissions(response.data);
+        setAllSubmissions(response.data.results);
+        setNextAllUrl(response.data.next)
+        setPrevAllUrl(response.data.previous)
       })
       .catch((error) => {
       });
@@ -52,7 +63,7 @@ const ProblemCard = ({ detail, id, isContest }) => {
                 activeTab === "my" ? "bg-[#3a3b3c] text-white" : "text-gray-400"
               }`}
               onClick={() => {
-                handleUserSubmission();
+                handleUserSubmissions();
               }}
             >
               My Submissions
@@ -99,6 +110,12 @@ const ProblemCard = ({ detail, id, isContest }) => {
             detail={detail}
             userSubmissions={userSubmissions}
             allSubmissions={allSubmissions}
+            handleAllSubmissions = {handleAllSubmissions}
+            handleUserSubmission = {handleUserSubmissions}
+            nextUserUrl = {nextUserUrl} 
+            prevUserUrl = {prevUserUrl}
+            nextAllUrl = {nextAllUrl}
+            prevAllUrl = {prevAllUrl}
           />
         }
       </div>

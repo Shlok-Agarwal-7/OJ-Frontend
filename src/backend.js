@@ -41,4 +41,14 @@ apiClient.interceptors.response.use(
   }
 );
 
+export const toRelativeUrl = (fullUrl) => {
+  try {
+    const url = new URL(fullUrl);
+    return url.pathname + url.search; // e.g. "/getusersubmissions/?problem=1&page=2"
+  } catch (error) {
+    // If fullUrl is already a relative path, just return it
+    return fullUrl;
+  }
+};
+
 export default apiClient;
